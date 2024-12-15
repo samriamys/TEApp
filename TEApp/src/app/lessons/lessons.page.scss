@@ -1,0 +1,35 @@
+.vowels-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Espacio entre filas */
+    margin-top: 50px;
+  }
+  
+  .row {
+    display: flex;
+    gap: 100px; /* Espacio entre botones */
+  }
+  
+  .vowel-button {
+    --border-radius: 50%; /* Botones redondos */
+    width: 60px; /* Ancho fijo */
+    height: 60px; /* Alto fijo */
+    padding: 0; /* Elimina cualquier padding */
+    font-size: 20px; /* Tamaño del texto */
+    display: flex;
+    align-items: center; /* Centra el texto verticalmente */
+    justify-content: center; /* Centra el texto horizontalmente */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra alrededor del botón */
+  }
+  
+  .vowel-button[color="primary"] {
+    --background: #c93f6d; /* Color rosa como en la imagen */
+    --color: white;
+  }
+  
+  .vowel-button[color="medium"] {
+    --background: #808080; /* Color gris como en la imagen */
+    --color: white;
+  }

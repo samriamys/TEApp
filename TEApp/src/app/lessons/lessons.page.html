@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Lessons</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Lecciones</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="vowels-container">
+    <!-- Botones con enlaces a cada lección -->
+    <div class="row">
+      <ion-button class="vowel-button" color="medium" [routerLink]="['/lessons/vocales/A', 'a']">A</ion-button>
+      <ion-button class="vowel-button" color="medium" [routerLink]="['/lessons/vocales', 'b']">E</ion-button>
+    </div>
+    <div class="row">
+      <ion-button class="vowel-button" color="medium" [routerLink]="['/lessons/vocales', 'i']">I</ion-button>
+    </div>
+    <div class="row">
+      <ion-button class="vowel-button" color="medium" [routerLink]="['/lessons/vocales', 'o']">O</ion-button>
+      <ion-button class="vowel-button" color="medium" [routerLink]="['/lessons/vocales', 'u']">U</ion-button>
+    </div>
+  </div>
+</ion-content>

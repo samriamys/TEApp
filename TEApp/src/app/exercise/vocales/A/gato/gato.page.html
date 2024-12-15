@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>
+        exercise
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <!--Reproduce audio en cuanto se entra a la pagina-->
+  <audio autoplay >
+    <source src="assets/audio/gato.mp3" type="audio/mpeg">
+  </audio>
+  
+  <ion-content [fullscreen]="true">
+  
+    <ion-toolbar>
+      <ion-title size="large" class="ion-text-center">Ejercicio</ion-title>
+    </ion-toolbar>
+  
+    <!-- Botón redondo con ícono -->
+    <ion-button shape="round" class="icon-button">
+      <ion-icon slot="icon-only" name="heart"></ion-icon>
+    </ion-button>
+  
+  
+  
+    <!-- Cuadro centrado con imagen -->
+    <div class="center-box">
+      <img src="assets/image/gato.png" alt="Centered Image" (click)="playAudio()"/>
+    </div>
+  
+    <audio id="audioElement" src="assets/audio/gato.mp3"></audio>
+    <div class="exercise-container">
+        <!-- Palabra con la letra faltante -->
+        <h2 class="word-display">{{ filledWord }}</h2>
+        <div class="letters-container">
+          <!-- Genera los botones dinámicamente -->
+          <button
+            *ngFor="let vowel of vowels"
+            class="square-button"
+            [class.selected]="isSelected(vowel)"
+            (click)="selectLetter(vowel)">
+            {{ vowel }}
+          </button>
+        </div>
+    </div>
+    
+    <app-explore-container name="Exercise page"></app-explore-container>
+  </ion-content>

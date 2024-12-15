@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { addIcons } from 'ionicons';  
+import { heart } from 'ionicons/icons';
 
 @Component({
   selector: 'app-explore-container',
@@ -7,5 +9,9 @@ import { Component, Input } from '@angular/core';
   standalone: true,
 })
 export class ExploreContainerComponent {
-  @Input() name?: string;
+name: string = ''
+  constructor() {
+
+    addIcons({ heart });
+  }
 }

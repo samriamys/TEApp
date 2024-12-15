@@ -7,19 +7,24 @@ export const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'lessons',
         loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          import('../lessons/lessons.page').then((m) => m.LessonsPage),
       },
       {
-        path: 'tab2',
+        path: 'exam',
         loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          import('../exam/exam.page').then((m) => m.ExamPage),
       },
       {
-        path: 'tab3',
+        path: 'exercise',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('../exercise/exercise.page').then((m) => m.ExercisePage),
+      },
+      {
+        path: 'a',
+        loadComponent: () =>
+          import('../lessons/Vocales/A/a.page').then((m) => m.aPage),
       },
       {
         path: '',
