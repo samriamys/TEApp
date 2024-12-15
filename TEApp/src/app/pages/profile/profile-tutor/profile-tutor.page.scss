@@ -1,0 +1,164 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #dae0f0;
+  z-index: -1;
+}
+
+.profile-container {
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  z-index: 99;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.config-button {
+  height: 120px;
+  width: 120px;
+  padding: 20px;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  text-align: center;
+}
+
+.headers {
+  font-family: "Poppins-SemiBold", sans-serif;
+  font-weight: 600;
+}
+.name-header {
+  color: #000;
+  font-size: 52px;
+}
+
+.sub-header {
+  font-size: 40px;
+  color: #7e8494;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.profile-picture {
+  padding: 20px;
+  height: 240px;
+  width: 240px;
+}
+
+.rounded-input {
+  border-radius: 50px;
+  background-color: #7da2ff;
+  padding: 10px;
+  --highlight-background: transparent; /* Removes item background highlight */
+}
+
+.user-code {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+.user-code h3 {
+  flex: 2;
+}
+.round-input {
+  flex: 1;
+  --background: #7da2ff;
+  --color: #fff;
+  --placeholder-color: #ddd;
+  --placeholder-opacity: 0.8;
+
+  --padding-bottom: 10px;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  --padding-top: 10px;
+}
+::ng-deep .round-input .input-wrapper {
+  border-radius: 999px;
+}
+
+::ng-deep .round-input .native-wrapper,
+.course-complete-chip {
+  color: #fff;
+  font-family: "Poppins-SemiBold", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+}
+
+.search-input {
+  --background: #dae0f0;
+}
+
+.search-icon {
+  color: #7e8494;
+}
+
+.student-list-container {
+  flex: 1;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.student-card {
+  background-color: white;
+  margin: 30px;
+}
+
+.student-picture {
+  width: 120px;
+  height: 120px;
+  padding: 20px;
+}
+
+.student-details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  text-align: left;
+  width: 100%;
+}
+
+.course-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.course-complete-chip {
+  flex: 2;
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.course-header {
+  flex: 1;
+}
+.course-incomplete {
+  background-color: #7e8494;
+}
+
+.course-completed {
+  background-color: #93d333;
+}

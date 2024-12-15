@@ -1,0 +1,86 @@
+<div class="profile-container">
+  <div class="button-container">
+    <ion-button fill="clear" form="round">
+      <img
+        src="/assets/icon/config.svg"
+        alt="Profile Picture"
+        class="config-button"
+      />
+    </ion-button>
+  </div>
+  <div class="profile-info">
+    <img
+      src="/assets/icon/user-thumbnail.svg"
+      alt="Profile Picture"
+      class="profile-picture"
+    />
+    <div class="details-container">
+      <h2 class="headers name-header">{{profile?.name}}</h2>
+      <h3 class="sub-header headers">{{profile?.email}}</h3>
+    </div>
+  </div>
+
+  <div class="user-code">
+    <h3 class="sub-header headers">Codigo de usuario</h3>
+    <ion-input
+      [(ngModel)]="userCode"
+      inputmode="numeric"
+      fill="outline"
+      class="round-input"
+    >
+      <ion-icon
+        slot="start"
+        name="pencil"
+        slot="end"
+        class="input-icon"
+        size="large"
+      ></ion-icon>
+    </ion-input>
+  </div>
+
+  <div class="user-code">
+    <ion-input
+      inputmode="search"
+      fill="outline"
+      class="round-input search-input"
+      [(ngModel)]="searchName"
+      (ngModelChange)="filterData(searchName)"
+    >
+      <ion-icon
+        slot="start"
+        name="search-outline"
+        slot="start"
+        class="search-icon"
+        size="large"
+      ></ion-icon>
+    </ion-input>
+  </div>
+</div>
+<div class="student-list-container">
+  @for (student of studentsData; track $index) {
+  <ion-card class="student-card">
+    <div class="profile-info">
+      <img
+        src="/assets/icon/user-thumbnail.svg"
+        alt="Profile Picture"
+        class="student-picture"
+      />
+      <div class="student-details-container">
+        <h2 class="headers name-header">{{student.name}}</h2>
+        <div class="course-row">
+          <h3 class="sub-header headers course-header">Curso:</h3>
+          @if(student.isCourseCompleted){
+          <ion-chip class="course-complete-chip course-completed"
+            >Completado</ion-chip
+          >
+          }@else{
+          <ion-chip class="course-complete-chip course-incomplete"
+            >Incompleto</ion-chip
+          >
+          }
+        </div>
+      </div>
+    </div>
+  </ion-card>
+  }
+</div>
