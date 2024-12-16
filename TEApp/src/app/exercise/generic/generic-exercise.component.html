@@ -3,8 +3,13 @@
 
   <div class="center-box" (click)="playAudio()">
     <img [src]="exercise.imageUrl" alt="Exercise Image" />
-    <div class="word-display-container">
-      <h2 class="word-display">{{ filledWord.toLowerCase() }}</h2>
+    <div
+      [ngClass]="{ solved: isExerciseSolved }"
+      class="word-display-container"
+    >
+      <h2 [ngClass]="{ solved: isExerciseSolved }" class="word-display">
+        {{ filledWord.toLowerCase() }}
+      </h2>
     </div>
   </div>
 
@@ -13,6 +18,7 @@
       *ngFor="let letter of exercise.letterOptions"
       class="square-button"
       [class.selected]="isSelected(letter)"
+      [disabled]="isExerciseSolved"
       (click)="selectLetter(letter)"
     >
       {{ letter.toLowerCase() }}

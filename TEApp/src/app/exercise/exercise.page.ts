@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { GenericExerciseComponent } from '~/app/exercise/generic/generic-exercise.component';
+import { ExerciseCompleteComponent } from './exercise-complete/exercise-complete.component';
 
 @Component({
   selector: 'app-exercise',
   templateUrl: 'exercise.page.html',
   styleUrls: ['exercise.page.scss'],
   standalone: true,
-  imports: [IonicModule, GenericExerciseComponent],
+  imports: [IonicModule, GenericExerciseComponent, ExerciseCompleteComponent],
 })
 export class ExercisePage {
   currentIndex = 0;
+  allCompleted: boolean = false;
   exercises = [
     {
       incompleteText: '_rdilla',
@@ -77,9 +79,15 @@ export class ExercisePage {
     },
   ];
   constructor() {}
-
+  ionViewWillEnter(): void {
+    this.currentIndex = 0;
+  }
   next() {
     this.currentIndex = this.currentIndex + 1;
     console.log(this.currentIndex);
+
+    if (this.currentIndex === this.exercises.length) {
+      this.allCompleted = true;
+    }
   }
 }

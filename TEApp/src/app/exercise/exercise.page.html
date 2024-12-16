@@ -1,4 +1,6 @@
 @for(exercise of exercises; track $index) { @if($index === currentIndex){
 <app-generic-exercise (success)="next()" [exercise]="exercise">
 </app-generic-exercise>
-} }
+} } @if (allCompleted) {
+<app-exercise-complete></app-exercise-complete>
+}

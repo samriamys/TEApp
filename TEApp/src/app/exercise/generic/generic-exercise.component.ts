@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import confetti from 'canvas-confetti';
 
 export type Exercise = {
   incompleteText: string;
@@ -29,7 +30,7 @@ export class GenericExerciseComponent implements OnInit {
   @Output() success = new EventEmitter<void>();
 
   selectedLetter: string = '';
-
+  isExerciseSolved: boolean = false;
   constructor() {}
 
   ngOnInit() {
@@ -44,16 +45,32 @@ export class GenericExerciseComponent implements OnInit {
   }
 
   selectLetter(letter: string) {
+    if (this.isExerciseSolved) {
+      return;
+    }
     this.selectedLetter = this.selectedLetter === letter ? '' : letter;
     console.log(this.filledWord);
     console.log(this.exercise.completeText);
     if (
       this.exercise.completeText.toLowerCase() === this.filledWord.toLowerCase()
     ) {
-      setTimeout(() => this.success.emit(), 1000);
+      this.isExerciseSolved = true;
+      this.playAudio();
+      this.celebrate();
+
+      setTimeout(() => {
+        confetti.reset();
+        this.success.emit();
+      }, 2000);
     }
   }
-
+  celebrate() {
+    confetti({
+      particleCount: 200,
+      spread: 200,
+      origin: { y: 0.6 },
+    });
+  }
   get filledWord(): string {
     if (this.selectedLetter) {
       return this.exercise.incompleteText.replace('_', this.selectedLetter);
