@@ -1,0 +1,21 @@
+<div class="exercise-container">
+  <audio id="audioElement" [src]="exercise.audioUrl"></audio>
+
+  <div class="center-box" (click)="playAudio()">
+    <img [src]="exercise.imageUrl" alt="Exercise Image" />
+    <div class="word-display-container">
+      <h2 class="word-display">{{ filledWord.toLowerCase() }}</h2>
+    </div>
+  </div>
+
+  <div class="letters-container">
+    <button
+      *ngFor="let letter of exercise.letterOptions"
+      class="square-button"
+      [class.selected]="isSelected(letter)"
+      (click)="selectLetter(letter)"
+    >
+      {{ letter.toLowerCase() }}
+    </button>
+  </div>
+</div>

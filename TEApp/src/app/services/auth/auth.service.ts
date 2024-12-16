@@ -115,5 +115,8 @@ export class AuthService {
     this._isAuthenticated = false;
     this._profile = undefined;
     localStorage.removeItem(this.authKey);
+
+    const storedSessionString = localStorage.getItem(this.authKey);
+    console.log(storedSessionString);
   }
 }

@@ -1,39 +1,22 @@
 import { Routes } from '@angular/router';
 import { AuthGuardService } from '~/app/services/auth/auth-guard.service';
-import { TabsPage } from '~/app/tabs/tabs.page';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: TabsPage,
+    path: 'lessons',
+    loadComponent: () =>
+      import('~/app/lessons/lessons.page').then((m) => m.LessonsPage),
     canActivate: [AuthGuardService],
-    children: [
-      {
-        path: 'tab1',
-        loadComponent: () =>
-          import('~/app/tab1/tab1.page').then((m) => m.Tab1Page),
-      },
-      {
-        path: 'tab2',
-        loadComponent: () =>
-          import('~/app/tab2/tab2.page').then((m) => m.Tab2Page),
-      },
-      {
-        path: 'tab3',
-        loadComponent: () =>
-          import('~/app/tab3/tab3.page').then((m) => m.Tab3Page),
-      },
-      {
-        path: '',
-        redirectTo: '/tab1',
-        pathMatch: 'full',
-      },
-    ],
   },
   {
-    path: 'home',
+    path: 'exam',
+    loadComponent: () => import('~/app/exam/exam.page').then((m) => m.ExamPage),
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'exercise',
     loadComponent: () =>
-      import('~/app/pages/home/home.page').then((m) => m.HomePage),
+      import('~/app/exercise/exercise.page').then((m) => m.ExercisePage),
     canActivate: [AuthGuardService],
   },
   {
@@ -42,7 +25,6 @@ export const routes: Routes = [
       import('~/app/pages/profile/profile.page').then((m) => m.ProfilePage),
     canActivate: [AuthGuardService],
   },
-
   {
     path: 'login',
     loadComponent: () =>
@@ -54,7 +36,19 @@ export const routes: Routes = [
       import('~/app/pages/register/register.page').then((m) => m.RegisterPage),
   },
   {
-    path: '**',
-    redirectTo: '',
+    path: 'a',
+    loadComponent: () =>
+      import('~/app/lessons/Vocales/A/a/a.page').then((m) => m.aPage),
+  },
+  {
+    path: 'logout',
+    loadComponent: () =>
+      import('~/app/pages/logout/logout.page').then((m) => m.LogoutPage),
+  },
+  {
+    path: '',
+    loadComponent: () =>
+      import('~/app/pages/profile/profile.page').then((m) => m.ProfilePage),
+    canActivate: [AuthGuardService],
   },
 ];

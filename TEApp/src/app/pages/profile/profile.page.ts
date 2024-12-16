@@ -22,8 +22,16 @@ export class ProfilePage implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    this.checkProfile();
+  }
+
+  ionViewWillEnter(): void {
+    this.checkProfile();
+  }
+
+  private checkProfile(): void {
     const profile = this.authService.profile;
-    console.log(profile);
+    console.log(profile?.role);
     if (!profile) {
       this.router.navigate(['login']);
       return;
