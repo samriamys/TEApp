@@ -36,7 +36,7 @@ export const routes: Routes = [
       import('~/app/pages/register/register.page').then((m) => m.RegisterPage),
   },
   {
-    path: 'a',
+    path: 'lessons/Vocales/A/a',
     loadComponent: () =>
       import('~/app/lessons/Vocales/A/a/a.page').then((m) => m.aPage),
   },

@@ -1,35 +1,125 @@
-.vowels-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px; /* Espacio entre filas */
-    margin-top: 50px;
-  }
-  
-  .row {
-    display: flex;
-    gap: 100px; /* Espacio entre botones */
-  }
-  
-  .vowel-button {
-    --border-radius: 50%; /* Botones redondos */
-    width: 60px; /* Ancho fijo */
-    height: 60px; /* Alto fijo */
-    padding: 0; /* Elimina cualquier padding */
-    font-size: 20px; /* Tamaño del texto */
-    display: flex;
-    align-items: center; /* Centra el texto verticalmente */
-    justify-content: center; /* Centra el texto horizontalmente */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra alrededor del botón */
-  }
-  
-  .vowel-button[color="primary"] {
-    --background: #c93f6d; /* Color rosa como en la imagen */
-    --color: white;
-  }
-  
-  .vowel-button[color="medium"] {
-    --background: #808080; /* Color gris como en la imagen */
-    --color: white;
-  }
+ion-header {
+  --background: white;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f8f9fd;
+  border-radius: 10px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vowels-container,
+.consonants-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  height: 100%;
+}
+
+.curve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  position: relative;
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.vowel-button {
+  --background: #808088; /* Default background */
+  --border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.subtitle {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #1dac29;
+  border-radius: 10px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.consonant-button {
+  --background: #808088; /* Default background */
+  --border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selected {
+  background-color: #007bff !important ; /* Nuevo color de fondo */
+  color: white ; /* Mantener el texto en blanco */
+  font-weight: bold;
+  border: none; /* Remover cualquier borde si aplica */
+}
+
+.vowel-a {  transform: translateX(80px); } 
+.vowel-e {  transform: translateX(0px); }
+.vowel-i {  transform: translateX(-80px); }
+.vowel-o {  transform: translateX(0px); }
+.vowel-u {  transform: translateX(80px); }
+
+.consonant-m {  transform: translateX(0px); }
+.consonant-s {  transform: translateX(-80px); }
+.consonant-t {  transform: translateX(0px); }
+.consonant-l {  transform: translateX(80px); }
+.consonant-r {  transform: translateX(0px); }
+.consonant-p {  transform: translateX(-80px); }
+.consonant-n {  transform: translateX(0px); }
+.consonant-c {  transform: translateX(80px); }
+
+/* Ajustando separación */
+.vowel-a { margin-top: 0px; }
+.vowel-e { margin-top: 30px; }
+.vowel-i { margin-top: 30px; }
+.vowel-o { margin-top: 30px; }
+.vowel-u { margin-top: 30px; }
+
+.consonant-m { margin-top: 30px; }
+.consonant-s { margin-top: 30px; }  
+.consonant-t { margin-top: 30px; }
+.consonant-l { margin-top: 30px; }  
+.consonant-r { margin-top: 30px; }
+.consonant-p { margin-top: 30px; }  
+.consonant-n { margin-top: 30px; }
+.consonant-c { margin-top: 30px; }

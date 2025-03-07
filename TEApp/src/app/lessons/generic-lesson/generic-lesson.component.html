@@ -1,0 +1,17 @@
+<div class="lessons-container">
+  <audio id="audioElement" [src]="lessons.audioUrl"></audio>
+  <div> class="progress-container">
+  <!-- Barra de progreso -->
+  <ion-progress-bar [value]="getProgress()"></ion-progress-bar>
+  </div>
+
+  <!-- Reproductor de audio y contenido de la lección -->
+  
+
+  <div class="center-box" (click)="playAudio()">
+    <img [src]="lessons.imageUrl" alt="Lesson Image" />
+    <div class="word-display-container">
+      <h2 class="word-display">{{ lessons.completeText }}</h2>
+    </div>
+  </div>
+</div>

@@ -15,24 +15,10 @@ export class ExercisePage {
   allCompleted: boolean = false;
   exercises = [
     {
-      incompleteText: '_rdilla',
-      completeText: 'ardilla',
-      imageUrl: 'assets/image/ardilla.png',
-      audioUrl: 'assets/audio/ardilla.mp3',
-      letterOptions: ['a', 'e', 'i', 'o', 'u'],
-    },
-    {
-      incompleteText: '_beja',
-      completeText: 'abeja',
-      imageUrl: 'assets/image/abeja.png',
-      audioUrl: 'assets/audio/abeja.mp3',
-      letterOptions: ['a', 'e', 'i', 'o', 'u'],
-    },
-    {
-      incompleteText: '_nillo',
-      completeText: 'anillo',
-      imageUrl: 'assets/image/anillo.png',
-      audioUrl: 'assets/audio/anillo.mp3',
+      incompleteText: '_vion',
+      completeText: 'avion',
+      imageUrl: 'assets/image/avion.png',
+      audioUrl: 'assets/audio/avion.mp3',
       letterOptions: ['a', 'e', 'i', 'o', 'u'],
     },
     {
@@ -43,10 +29,25 @@ export class ExercisePage {
       letterOptions: ['a', 'e', 'i', 'o', 'u'],
     },
     {
-      incompleteText: '_vion',
-      completeText: 'avion',
-      imageUrl: 'assets/image/avion.png',
-      audioUrl: 'assets/audio/avion.mp3',
+      incompleteText: '_nillo',
+      completeText: 'anillo',
+      imageUrl: 'assets/image/anillo.png',
+      audioUrl: 'assets/audio/anillo.mp3',
+      letterOptions: ['a', 'e', 'i', 'o', 'u'],
+    },
+    
+    {
+      incompleteText: '_beja',
+      completeText: 'abeja',
+      imageUrl: 'assets/image/abeja.png',
+      audioUrl: 'assets/audio/abeja.mp3',
+      letterOptions: ['a', 'e', 'i', 'o', 'u'],
+    },
+    {
+      incompleteText: '_rdilla',
+      completeText: 'ardilla',
+      imageUrl: 'assets/image/ardilla.png',
+      audioUrl: 'assets/audio/ardilla.mp3',
       letterOptions: ['a', 'e', 'i', 'o', 'u'],
     },
     {

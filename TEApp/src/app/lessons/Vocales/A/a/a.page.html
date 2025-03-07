@@ -1,18 +1,13 @@
-<ion-header [translucent]="true">
-    <ion-toolbar>
-      <ion-title>Vocal A</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content [fullscreen]="true">
-    <h1>Lección de la vocal A</h1>
-    <p>Aquí puedes agregar contenido específico para la vocal A.</p>
-  </ion-content>
+@for (lessons of lessons; track $index) {
+  @if ($index === currentIndex && !allCompleted) {
+    <app-generic-lesson 
+    [currentIndex]="currentIndex"
+    (click)="onImageClick()"
+    (success)="next()" [lessons]="lessons">
+    </app-generic-lesson>
+  }
+}
 
-
-  <!-- Cuadro centrado con imagen -->
-  <div class="center-box">
-    <img src="assets/image/a.png" alt="Centered Image" (click)="playAudio()"/>
-  </div>
-
-  <ion-button size="large" (click)="playAudio()">a</ion-button>
+@if (allCompleted) {
+  <app-lessons-complete></app-lessons-complete>
+  }

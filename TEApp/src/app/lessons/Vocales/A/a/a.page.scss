@@ -1,12 +1,6 @@
-  .center-box {
-    width: 400px;
-    height: 400px;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    margin: auto;
+.ion-progress-bar {
+    margin-top: 20px;
+    height: 10px;
+    --background: #e0e0e0;
+    --progress-background: #007bff;
   }
-
-  

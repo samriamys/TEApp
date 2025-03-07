@@ -1,21 +1,24 @@
-import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/angular/standalone';
-//import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { GenericLessonsComponent } from '~/app/lessons/generic-lesson/generic-lesson.component';
+import { LessonsCompleteComponent } from '~/app/lessons/lessons-complete/lessons-complete.component';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-lessons',
   templateUrl: 'lessons.page.html',
   styleUrls: ['lessons.page.scss'],
   standalone: true,
-  imports: [IonButton, IonHeader, IonToolbar, IonTitle, IonContent, CommonModule, RouterLink]
+  imports: [IonicModule, GenericLessonsComponent, LessonsCompleteComponent, RouterModule, CommonModule],
 })
 export class LessonsPage {
   vowels: string[] = ['A', 'E', 'I', 'O', 'U']; // Lista de vocales
+  consonants: string[] = ['M', 'S', 'T', 'L', 'R', 'P', 'N', 'C']; // Lista de consonantes
 
-  constructor() {
-    
+  selectedLetter: string = ''; // Variable para almacenar la letra seleccionada
+
+  selectLetter(letter: string) {
+    this.selectedLetter = letter; // Cambia la letra seleccionada
   }
-
 }

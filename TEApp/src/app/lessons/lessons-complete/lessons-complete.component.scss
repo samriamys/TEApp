@@ -1,0 +1,80 @@
+.ion-content {
+  --background: linear-gradient(
+    135deg,
+    var(--ion-color-primary),
+    var(--ion-color-secondary)
+  );
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: black;
+  margin-top: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: black;
+  margin-bottom: 2rem;
+}
+
+p {
+  color: black;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+
+:host {
+  height: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px; /* Espaciado entre los botones */
+  margin-top: 1rem;
+}
+
+.ion-button {
+  border-radius: 10px; /* Rounded corners */
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20;
+  background-color: rgb(14, 185, 14); /* Color de fondo */
+}
+
+.home-button {
+  background-color: rgb(14, 185, 14) !important;
+  width: 150px;
+  height: 150px;
+  border-radius: 50px; /* Rounded corners */
+}
+
+.back-button {
+  background-color: rgb(14, 185, 14) !important;
+  width: 150px;
+  height: 150px;
+  border-radius: 50px; /* Rounded corners */
+}
+
+.next-button {
+  background-color: rgb(14, 185, 14) !important;
+  width: 150px;
+  height: 150px;
+  border-radius: 50px; /* Rounded corners */
+}
+
+.ion-button img {
+  width: 10px; /* Tamaño de la imagen */
+  height: 10px;
+  filter: invert(1); /* Hace que las imágenes negras se vean blancas */
+}
+
+.container {
+  height: 100%;
+  background-color: #f8f9fd;
+}
