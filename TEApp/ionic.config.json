@@ -1,7 +1,0 @@
-{
-  "name": "TEApp",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
