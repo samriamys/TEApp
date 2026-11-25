@@ -1,0 +1,64 @@
+<div class="exercise-container" *ngIf="currentExercise && !examFinished">
+  <audio id="examAudioElement" [src]="currentExercise.audioUrl"></audio>
+
+  <div class="center-box" (click)="playAudio()">
+    <img [src]="currentExercise.imageUrl" alt="Exam Image" />
+
+    <div
+      [ngClass]="{
+        solved: isAnswered && isCorrect,
+        wrong: isAnswered && !isCorrect,
+      }"
+      class="word-display-container"
+    >
+      <h2
+        [ngClass]="{
+          solved: isAnswered && isCorrect,
+          wrong: isAnswered && !isCorrect,
+        }"
+        class="word-display"
+      >
+        {{ filledWord.toLowerCase() }}
+      </h2>
+    </div>
+  </div>
+
+  <p class="exam-counter">
+    Pregunta {{ currentIndex + 1 }} de {{ exercises.length }}
+  </p>
+
+  <ion-progress-bar [value]="(currentIndex + 1) / exercises.length">
+  </ion-progress-bar>
+
+  <div class="letters-container">
+    <button
+      *ngFor="let letter of currentExercise.letterOptions"
+      class="square-button"
+      [class.selected]="isSelected(letter)"
+      [class.correct]="isAnswered && isCorrect && isSelected(letter)"
+      [class.incorrect]="isAnswered && !isCorrect && isSelected(letter)"
+      [disabled]="isAnswered"
+      (click)="selectLetter(letter)"
+    >
+      {{ letter.toLowerCase() }}
+    </button>
+  </div>
+</div>
+
+<div class="exercise-container" *ngIf="examFinished">
+  <ion-icon
+    name="checkmark-circle"
+    color="success"
+    style="font-size: 128px"
+  ></ion-icon>
+
+  <h1>¡Examen terminado!</h1>
+
+  <h2>Resultado: {{ score }} / 100%</h2>
+
+  <div class="button-container">
+    <ion-button routerLink="/lessons" color="white">
+      <img src="assets/image/home.png" alt="Lecciones" />
+    </ion-button>
+  </div>
+</div>

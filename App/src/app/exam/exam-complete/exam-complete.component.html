@@ -1,0 +1,35 @@
+<ion-content class="ion-text-center container">
+  <ion-icon
+    name="checkmark-circle"
+    color="success"
+    style="font-size: 128px"
+  ></ion-icon>
+
+  <h1>¡Examen terminado!</h1>
+
+  <h2>Resultado: {{ score }} / {{ total }}%</h2>
+
+  <p>Has terminado el examen de la vocal {{ letra.toUpperCase() }}.</p>
+
+  <div class="button-container">
+    <!-- HOME -->
+    <ion-button class="home-button" routerLink="/lessons" color="white">
+      <img src="assets/image/home.png" alt="Lecciones" />
+    </ion-button>
+
+    <!-- REINTENTAR EXAMEN -->
+    <ion-button
+      class="retry-button"
+      [routerLink]="['/exam']"
+      [queryParams]="{ letra: letra }"
+      color="white"
+    >
+      <img src="assets/image/back.png" alt="Reintentar examen" />
+    </ion-button>
+
+    <!-- SIGUIENTE -->
+    <ion-button class="next-button" [routerLink]="['/lessons']" color="white">
+      <img src="assets/image/next.png" alt="Siguiente" />
+    </ion-button>
+  </div>
+</ion-content>

@@ -1,0 +1,21 @@
+<ion-content>
+  <div *ngIf="isLoading" class="ion-text-center">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando examen...</p>
+  </div>
+
+  <app-generic-exam
+    *ngIf="!isLoading && exercises.length > 0 && !examCompleted"
+    [exercises]="exercises"
+    (finished)="onExamFinished($event)"
+  >
+  </app-generic-exam>
+
+  <app-exam-complete
+    *ngIf="examCompleted"
+    [score]="score"
+    [total]="total"
+    [letra]="letraSeleccionada"
+  >
+  </app-exam-complete>
+</ion-content>

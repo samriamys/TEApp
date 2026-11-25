@@ -1,0 +1,8 @@
+@for (lessons of lessons; track $index) { @if ($index === currentIndex &&
+!allCompleted) {
+<ion-content>
+  <app-generic-lesson></app-generic-lesson>
+</ion-content>
+} } @if (allCompleted) {
+<app-lessons-complete></app-lessons-complete>
+}

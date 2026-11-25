@@ -1,0 +1,27 @@
+<ion-content>
+
+  <div class="lessons-container" *ngIf="currentLesson">
+
+    <ion-progress-bar
+      class="ion-progress-bar"
+      [value]="getProgress()">
+    </ion-progress-bar>
+
+    <div class="center-box" (click)="handleClick()">
+
+      <img
+        [src]="currentLesson.imageUrl"
+        [alt]="currentLesson.completeText"
+      />
+
+      <div class="word-display-container">
+        <div class="word-display">
+          {{ currentLesson.completeText }}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>

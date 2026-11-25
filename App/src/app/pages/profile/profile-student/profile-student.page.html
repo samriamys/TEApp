@@ -1,0 +1,63 @@
+<div class="profile-container">
+  <div class="button-container">
+    <ion-button fill="clear" form="round">
+      <img
+        src="/assets/icon/config.svg"
+        alt="Profile Picture"
+        class="config-button"
+      />
+    </ion-button>
+  </div>
+  <div class="profile-info">
+    <img
+      src="/assets/icon/user-thumbnail.svg"
+      alt="Profile Picture"
+      class="profile-picture"
+    />
+    <div class="details-container">
+      <h2 class="headers name-header">{{profile?.name}}</h2>
+      <h3 class="sub-header headers">{{profile?.email}}</h3>
+    </div>
+  </div>
+
+  <div class="user-code">
+    <h3 class="sub-header headers">Fase ubicado</h3>
+    <h3 class="sub-header headers phase">ch</h3>
+  </div>
+
+  <div class="user-code">
+    <ion-input
+      inputmode="search"
+      fill="outline"
+      class="round-input search-input"
+      [(ngModel)]="searchName"
+      (ngModelChange)="filterData(searchName)"
+    >
+      <ion-icon
+        slot="start"
+        name="search-outline"
+        slot="start"
+        class="search-icon"
+        size="large"
+      ></ion-icon>
+    </ion-input>
+  </div>
+</div>
+<div class="course-list-container">
+  @for (course of courses; track $index) {
+  <ion-card class="course-card">
+    <div class="profile-info">
+      <span class="course-thumbnail">{{course.syllable}}</span>
+      <div class="course-details-container">
+        {{ course.progress + ' / ' + course.maxProgress }}
+        <div class="progress-bar-container">
+          <ion-progress-bar
+            [value]="(course.progress / course.maxProgress)"
+            class="vertical-progress-bar"
+          ></ion-progress-bar>
+        </div>
+      </div>
+    </div>
+  </ion-card>
+  }
+</div>
