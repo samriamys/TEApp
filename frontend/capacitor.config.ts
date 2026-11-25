@@ -1,9 +1,10 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.teapp.app',
   appName: 'TEApp',
-  webDir: 'www'
+  webDir: 'www',
+  androidScheme: 'http',
 };
 
 export default config;

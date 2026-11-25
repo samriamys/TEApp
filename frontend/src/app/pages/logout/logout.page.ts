@@ -13,7 +13,8 @@ import { AuthService } from '~/app/services/auth/auth.service';
 export class LogoutPage {
   constructor(private authService: AuthService, private router: Router) {}
 
-  logout() {
-    void this.authService.logout();
+  async logout() {
+    await this.authService.logout();
+    if (this.authService.isNative) await this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 }

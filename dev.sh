@@ -48,7 +48,9 @@ prepare() {
     .local/cache/node_modules .local/cache/npm .local/cache/angular \
     .local/cache/alpine/node_modules .local/cache/alpine/angular \
     .local/cache/alpine/backend-target .local/cache/alpine/home \
-    .local/cache/alpine/maven .local/cache/alpine/npm
+    .local/cache/alpine/maven .local/cache/alpine/npm \
+    .local/cache/android/node_modules .local/cache/android/gradle \
+    .local/cache/android/npm .local/cache/android/home
   # Mount points must exist beneath the read-only source mounts. Container
   # contents live in .local/cache; these directories are only the destinations.
   mkdir -p backend/target frontend/node_modules frontend/.angular
@@ -83,6 +85,10 @@ case "${1:-up}" in
   frontend)
     compose exec -w /workspace/frontend dev sh ./dev.sh
     ;;
+  apk)
+    prepare
+    compose run --build --rm android-builder
+    ;;
   clean)
     # Stop writers before discarding disposable files. Keep PostgreSQL data.
     compose down
@@ -90,7 +96,7 @@ case "${1:-up}" in
     printf '%s\n' 'Removed dependency and build caches. Database files remain in .local/postgres/.'
     ;;
   *)
-    printf '%s\n' 'Usage: ./dev.sh [--sudo] [prepare|up|down|logs [service...]|ps|shell|backend|frontend|clean]' >&2
+    printf '%s\n' 'Usage: ./dev.sh [--sudo] [prepare|up|down|logs [service...]|ps|shell|backend|frontend|apk|clean]' >&2
     exit 2
     ;;
 esac

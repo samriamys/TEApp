@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { apiUrl } from '~/app/services/api-url';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -23,7 +24,7 @@ export class ProfileTutorPage implements OnInit {
 
   constructor(private http: HttpClient) {}
   ngOnInit(): void {
-    this.http.get<Student[]>('/api/profile/students').subscribe({
+    this.http.get<Student[]>(apiUrl('/api/profile/students')).subscribe({
       next: students => { this.students = students; this.filterData(this.searchName); },
       error: () => { this.loadError = true; },
     });

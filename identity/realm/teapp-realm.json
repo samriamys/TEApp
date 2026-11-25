@@ -25,14 +25,16 @@
       "directAccessGrantsEnabled": false,
       "implicitFlowEnabled": false,
       "redirectUris": [
-        "http://localhost:4200/*"
+        "http://localhost:4200/*",
+        "com.teapp.app://oauth"
       ],
       "webOrigins": [
-        "http://localhost:4200"
+        "http://localhost:4200",
+        "http://localhost"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
-        "post.logout.redirect.uris": "http://localhost:4200/*"
+        "post.logout.redirect.uris": "http://localhost:4200/*##com.teapp.app://logout"
       },
       "protocolMappers": [
         {

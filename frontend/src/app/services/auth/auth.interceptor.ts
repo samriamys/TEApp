@@ -2,9 +2,10 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { from, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
+import { apiUrl } from '../api-url';
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
-  if (!request.url.startsWith('/api/')) return next(request);
+  if (!request.url.startsWith('/api/') && !request.url.startsWith(apiUrl('/api/'))) return next(request);
   const auth = inject(AuthService);
   return from(auth.accessToken()).pipe(
     switchMap(token => next(token ? request.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : request)),

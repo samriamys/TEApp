@@ -1,0 +1,23 @@
+FROM node:20-bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    ANDROID_HOME=/opt/android-sdk \
+    ANDROID_SDK_ROOT=/opt/android-sdk
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openjdk-17-jdk-headless curl unzip ca-certificates git \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG ANDROID_COMMAND_LINE_TOOLS=11076708
+RUN mkdir -p "$ANDROID_HOME/cmdline-tools" /tmp/android-tools \
+    && curl -fsSL "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_COMMAND_LINE_TOOLS}_latest.zip" -o /tmp/android-tools.zip \
+    && unzip -q /tmp/android-tools.zip -d /tmp/android-tools \
+    && mv /tmp/android-tools/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest" \
+    && rm -rf /tmp/android-tools /tmp/android-tools.zip
+
+ENV PATH="${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${PATH}"
+
+RUN yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses >/dev/null \
+    && sdkmanager --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+WORKDIR /workspace

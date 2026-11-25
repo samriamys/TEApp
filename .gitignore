@@ -4,6 +4,7 @@
 
 # Repository-local container data, dependencies, and build caches
 /.local/
+/artifacts/*.apk
 
 # Generated IDE and build files
 .vs/

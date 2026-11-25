@@ -60,11 +60,11 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in backend/.env}
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?Run ./dev.sh prepare to generate the Keycloak administrator password}
-      KC_HOSTNAME: http://localhost:8180
+      KC_HOSTNAME_STRICT: "false"
       KC_HEALTH_ENABLED: "true"
       JAVA_OPTS_APPEND: -Dspi-theme-static-max-age=-1 -Dspi-theme-cache-themes=false -Dspi-theme-cache-templates=false
     ports:
-      - "127.0.0.1:8180:8080"
+      - "${HOST_BIND_ADDRESS:-127.0.0.1}:${KEYCLOAK_PORT:-8180}:8080"
     volumes:
       - ./identity/realm:/opt/keycloak/data/import:ro
       - ./identity/themes/teapp:/opt/keycloak/themes/teapp:ro
@@ -94,13 +94,14 @@ services:
       SERVER_PORT: "8080"
       API_PROXY_TARGET: http://127.0.0.1:8080
       OIDC_JWK_SET_URI: http://keycloak:8080/realms/teapp/protocol/openid-connect/certs
+      OIDC_ALLOWED_ISSUERS: ${OIDC_ALLOWED_ISSUERS:-http://localhost:8180/realms/teapp,http://10.0.2.2:8180/realms/teapp}
       MAVEN_USER_HOME: /cache/maven
       MAVEN_OPTS: -Duser.home=/cache/home
       NPM_CONFIG_CACHE: /cache/npm
       NG_CLI_ANALYTICS: "false"
     ports:
-      - "127.0.0.1:${SERVER_PORT:-8080}:8080"
-      - "127.0.0.1:${FRONTEND_PORT:-4200}:4200"
+      - "${HOST_BIND_ADDRESS:-127.0.0.1}:${SERVER_PORT:-8080}:8080"
+      - "${HOST_BIND_ADDRESS:-127.0.0.1}:${FRONTEND_PORT:-4200}:4200"
     volumes:
       - ./:/workspace
       - ./.local/cache/alpine/node_modules:/workspace/frontend/node_modules
@@ -112,3 +113,24 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  android-builder:
+    <<: *development
+    profiles: ["android"]
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile.android
+    working_dir: /workspace
+    command: ["sh", "./frontend/android-build.sh"]
+    environment:
+      HOME: /cache/android/home
+      ANDROID_HOME: /opt/android-sdk
+      ANDROID_SDK_ROOT: /opt/android-sdk
+      GRADLE_USER_HOME: /cache/android/gradle
+      NPM_CONFIG_CACHE: /cache/android/npm
+    volumes:
+      - ./:/workspace
+      - ./.local/cache/android/node_modules:/workspace/frontend/node_modules
+      - ./.local/cache/android/gradle:/cache/android/gradle
+      - ./.local/cache/android/npm:/cache/android/npm
+      - ./.local/cache/android/home:/cache/android/home

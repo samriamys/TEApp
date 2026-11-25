@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  keycloakUrl: 'http://localhost:8180',
+  apiBaseUrl: '',
+  nativeKeycloakUrl: 'http://10.0.2.2:8180',
+  nativeApiBaseUrl: 'http://10.0.2.2:8080',
+  nativeRedirectUri: 'com.teapp.app://oauth',
 };
 
 /*
