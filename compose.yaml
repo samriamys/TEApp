@@ -1,0 +1,114 @@
+# Use ./dev.sh up to prepare the bind mount directories with your user ID.
+x-development: &development
+  user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+  init: true
+  logging:
+    driver: local
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  postgres:
+    <<: *development
+    # The Debian image supports initialization with an arbitrary user ID.
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-teapp_db}
+      POSTGRES_USER: ${POSTGRES_USER:-teapp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in backend/.env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - type: bind
+        source: ./.local/postgres
+        target: /var/lib/postgresql/data
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./database/init
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  keycloak-db-init:
+    <<: *development
+    image: postgres:16-bookworm
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${POSTGRES_DB:-teapp_db}
+      PGUSER: ${POSTGRES_USER:-teapp}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in backend/.env}
+    command: ["psql", "-v", "ON_ERROR_STOP=1", "-c", "CREATE SCHEMA IF NOT EXISTS keycloak"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.5.5
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-teapp_db}
+      KC_DB_SCHEMA: keycloak
+      KC_DB_USERNAME: ${POSTGRES_USER:-teapp}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in backend/.env}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?Run ./dev.sh prepare to generate the Keycloak administrator password}
+      KC_HOSTNAME: http://localhost:8180
+      KC_HEALTH_ENABLED: "true"
+      JAVA_OPTS_APPEND: -Dspi-theme-static-max-age=-1 -Dspi-theme-cache-themes=false -Dspi-theme-cache-templates=false
+    ports:
+      - "127.0.0.1:8180:8080"
+    volumes:
+      - ./identity/realm:/opt/keycloak/data/import:ro
+      - ./identity/themes/teapp:/opt/keycloak/themes/teapp:ro
+    depends_on:
+      keycloak-db-init:
+        condition: service_completed_successfully
+    logging:
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  dev:
+    <<: *development
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    working_dir: /workspace
+    command: ["sleep", "infinity"]
+    env_file:
+      - ./backend/.env
+    environment:
+      HOME: /cache/home
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: "8080"
+      API_PROXY_TARGET: http://127.0.0.1:8080
+      OIDC_JWK_SET_URI: http://keycloak:8080/realms/teapp/protocol/openid-connect/certs
+      MAVEN_USER_HOME: /cache/maven
+      MAVEN_OPTS: -Duser.home=/cache/home
+      NPM_CONFIG_CACHE: /cache/npm
+      NG_CLI_ANALYTICS: "false"
+    ports:
+      - "127.0.0.1:${SERVER_PORT:-8080}:8080"
+      - "127.0.0.1:${FRONTEND_PORT:-4200}:4200"
+    volumes:
+      - ./:/workspace
+      - ./.local/cache/alpine/node_modules:/workspace/frontend/node_modules
+      - ./.local/cache/alpine/angular:/workspace/frontend/.angular
+      - ./.local/cache/alpine/backend-target:/workspace/backend/target
+      - ./.local/cache/alpine/home:/cache/home
+      - ./.local/cache/alpine/maven:/cache/maven
+      - ./.local/cache/alpine/npm:/cache/npm
+    depends_on:
+      postgres:
+        condition: service_healthy

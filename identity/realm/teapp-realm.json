@@ -1,0 +1,93 @@
+{
+  "realm": "teapp",
+  "enabled": true,
+  "displayName": "TEApp",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "loginTheme": "teapp",
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "es",
+    "en"
+  ],
+  "defaultLocale": "es",
+  "clients": [
+    {
+      "clientId": "teapp-web",
+      "name": "TEApp web",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:4200/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "teapp-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "teapp-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "name": "teapp-role-profile",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "teappRole",
+            "claim.name": "teapp_role",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "teapp-tutor-code",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "tutorCode",
+            "claim.name": "teapp_tutor_code",
+            "jsonType.label": "String",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ]
+    }
+  ],
+  "components": {
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "name": "declarative-user-profile",
+        "providerId": "declarative-user-profile",
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\": [{\"name\": \"username\", \"displayName\": \"Username\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false}, {\"name\": \"email\", \"displayName\": \"Correo electrónico\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"required\": {\"roles\": [\"user\"]}, \"validations\": {\"email\": {}, \"length\": {\"max\": 255}}}, {\"name\": \"firstName\", \"displayName\": \"Nombre\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"required\": {\"roles\": [\"user\"]}}, {\"name\": \"lastName\", \"displayName\": \"Apellido paterno\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"required\": {\"roles\": [\"user\"]}}, {\"name\": \"maternalLastName\", \"displayName\": \"Apellido materno\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false}, {\"name\": \"teappRole\", \"displayName\": \"Rol\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"required\": {\"roles\": [\"user\"]}, \"validations\": {\"options\": {\"options\": [\"student\", \"tutor\"]}}}, {\"name\": \"tutorCode\", \"displayName\": \"Código tutor\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"validations\": {\"length\": {\"max\": 32}}}], \"groups\": []}"
+          ]
+        }
+      }
+    ]
+  }
+}

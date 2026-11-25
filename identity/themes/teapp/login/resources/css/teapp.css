@@ -1,0 +1,42 @@
+/* TEApp authentication theme. The login forms are rendered by Keycloak. */
+@font-face { font-family: Poppins; src: url('../fonts/Poppins-Medium.ttf') format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: Poppins; src: url('../fonts/Poppins-SemiBold.ttf') format('truetype'); font-weight: 600; font-display: swap; }
+:root {
+  --teapp-background: #f7f9fc;
+  --teapp-primary: #7da2ff;
+  --teapp-muted: #7e8494;
+}
+body { background: var(--teapp-background); }
+.login-pf body { background: #f7f9fc; color: #161a25; font-family: Poppins, sans-serif; }
+.login-pf-page .card-pf { border: 0; box-shadow: none; background: #f7f9fc; max-width: 430px; }
+.pf-v5-c-login__main { background: #f7f9fc; box-shadow: none; }
+#kc-header-wrapper { display: none; }
+.pf-v5-c-login__main-header-utilities { display: none; }
+#kc-page-title { color: #7e8494; font-size: 24px; font-weight: 500; text-align: center; }
+#kc-form-login, #kc-register-form { display: flex; flex-direction: column; gap: 12px; }
+#kc-form-login > label, .teapp-step > label, #tutor-code-field > label { display: block; margin: 12px 0 5px; font-weight: 600; }
+#kc-form-login input:not([type=checkbox]), .teapp-step input:not([type=radio]):not([type=checkbox]) { box-sizing: border-box; width: 100%; min-height: 48px; padding: 10px 22px; border: 0; border-radius: 50px; background: #dae0f0; color: #151823; box-shadow: 0 3px 18px #0000001a; }
+.teapp-step h2 { text-align: center; color: #7e8494; font-size: 19px; margin: 20px 0; }
+.teapp-role-options { display: flex; gap: 8px; }
+.teapp-role-options label { flex: 1; padding: 16px; text-align: center; border-radius: 24px; background: white; }
+.teapp-role-options label:has(input:checked) { background: #7da2ff; color: white; }
+.teapp-role-options input { accent-color: #426ad1; }
+.teapp-primary { display: block; min-height: 50px; width: 75%; margin: 28px auto 0; border: 0; border-radius: 50px; background: #7da2ff; color: white; font-size: 18px; font-weight: 600; box-shadow: 0 5px 10px #7da2ff66; cursor: pointer; }
+.teapp-secondary { text-align: center; margin-top: 32px; color: #7e8494; }
+.teapp-secondary a { display: block; color: #426ad1; font-weight: 600; }
+.teapp-error { color: #a92318; }
+.teapp-actions { display: flex; gap: 8px; align-items: center; }
+.teapp-actions button { position: relative; }
+.teapp-actions img { position: absolute; right: 4px; top: 50%; transform: translateY(-50%) scale(.35); transform-origin: right center; }
+#step-back { border: 0; background: transparent; min-width: 60px; padding-top: 54px; position: relative; color: #526078; }
+#step-back img { right: 50%; top: 26px; transform: translate(50%, -50%) scale(.3); transform-origin: center; }
+.teapp-actions button[hidden], [hidden] { display: none !important; }
+.show-password { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.teapp-back { border: 0; background: transparent; width: 50px; height: 50px; position: relative; cursor: pointer; }
+.teapp-back img { position: absolute; left: 0; top: 0; transform: scale(.29); transform-origin: top left; }
+.password-toggle-art { width: 30px; height: 30px; position: relative; display: inline-block; }
+.password-toggle-art img { position: absolute; left: 50%; top: 50%; }
+.toggle-outer { transform: translate(-50%, -50%) scale(.25); }
+.toggle-inner { transform: translate(-50%, -50%) scale(.3); }
+.show-password input:not(:checked) + .password-toggle-art .toggle-inner { opacity: 0; }
+input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #315bc4; outline-offset: 2px; }

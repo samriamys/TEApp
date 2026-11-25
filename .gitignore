@@ -1,0 +1,10 @@
+# Local backend/database credentials
+/backend/.env
+/.env
+
+# Repository-local container data, dependencies, and build caches
+/.local/
+
+# Generated IDE and build files
+.vs/
+/backend/target/

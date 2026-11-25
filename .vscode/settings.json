@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["arbol"]
+  "cSpell.words": ["arbol"],
+  "files.watcherExclude": {
+    "**/.local/**": true
+  },
+  "search.exclude": {
+    "**/.local/**": true
+  }
 }

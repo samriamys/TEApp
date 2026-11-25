@@ -1,0 +1,10 @@
+{
+  "name": "TEApp development",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "initializeCommand": "./dev.sh prepare",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [4200, 8080],
+  "overrideCommand": false
+}

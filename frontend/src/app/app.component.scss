@@ -1,0 +1,11 @@
+ion-router-outlet.with-tabs {
+  bottom: 85px;
+}
+
+app-tabs {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
