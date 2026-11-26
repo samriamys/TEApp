@@ -5,6 +5,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { User } from '~/app/services/auth/auth.service';
+import { AuthService } from '~/app/services/auth/auth.service';
+import { LocalApiService } from '~/app/local-api/local-api.service';
+import { from } from 'rxjs';
 
 type Student = { name: string; email: string };
 
@@ -22,9 +25,12 @@ export class ProfileTutorPage implements OnInit {
   loadError = false;
   @Input() profile?: User;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService, private localApi: LocalApiService) {}
   ngOnInit(): void {
-    this.http.get<Student[]>(apiUrl('/api/profile/students')).subscribe({
+    const students = this.auth.localSubject
+      ? from(this.localApi.students(this.auth.localSubject))
+      : this.http.get<Student[]>(apiUrl('/api/profile/students'));
+    students.subscribe({
       next: students => { this.students = students; this.filterData(this.searchName); },
       error: () => { this.loadError = true; },
     });

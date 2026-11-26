@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import {
-  IonButton,
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -18,10 +18,10 @@ import {
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
   standalone: true,
-  imports: [IonButton, IonIcon, RouterLink],
+  imports: [IonIcon],
 })
 export class TabsPage {
-  constructor() {
+  constructor(private navController: NavController, private router: Router) {
     addIcons({
       bookOutline,
       createOutline,
@@ -29,5 +29,17 @@ export class TabsPage {
       personOutline,
       logOutOutline,
     });
+  }
+
+  isActive(path: string): boolean {
+    const currentPath = this.router.parseUrl(this.router.url).root.children['primary']?.segments[0]?.path;
+    return currentPath === path.slice(1);
+  }
+
+  navigate(event: MouseEvent, path: string): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (this.router.url === path) return;
+    void this.navController.navigateRoot(path, { animated: false });
   }
 }

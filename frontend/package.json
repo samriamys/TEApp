@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
     "@aparajita/capacitor-secure-storage": "6.0.1",
+    "@capacitor-community/sqlite": "6.0.2",
     "@capacitor/android": "^6.2.0",
     "@capacitor/app": "6.0.2",
     "@capacitor/browser": "6.0.4",
@@ -34,8 +35,10 @@
     "@ionic/cli": "^7.2.1",
     "canvas-confetti": "^1.9.3",
     "ionicons": "^7.2.1",
+    "jeep-sqlite": "2.8.0",
     "keycloak-js": "^26.2.2",
     "rxjs": "~7.8.0",
+    "sql.js": "1.11.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },

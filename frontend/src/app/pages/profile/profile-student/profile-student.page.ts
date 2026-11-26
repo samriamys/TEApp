@@ -1,97 +1,52 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { User } from '~/app/services/auth/auth.service';
+import { RouterLink } from '@angular/router';
+import { AuthService, User } from '~/app/services/auth/auth.service';
+import { LocalApiService } from '~/app/local-api/local-api.service';
 
-export type Course = {
-  syllable: string;
-  progress: number;
-  maxProgress: number;
-};
+type VowelProgress = { letter: string; completed: boolean };
 
 @Component({
   selector: 'app-profile-student',
   templateUrl: './profile-student.page.html',
   styleUrls: ['./profile-student.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [FormsModule, RouterLink],
 })
-export class ProfileStudentPage {
-  searchName: string = '';
-  rawCourses: Course[] = [];
-  courses: Course[] = [];
+export class ProfileStudentPage implements OnInit {
   @Input() profile?: User;
-  consonants: string[] = [
-    'M',
-    'S',
-    'T',
-    'L',
-    'R',
-    'P',
-    'N',
-    'C',
-    'D',
-    'V',
-    'F',
-    'B',
-    'J',
-    'Ñ',
-    'G',
-    'H',
-    'Q',
-    'Y',
-    'K',
-    'X',
-    'W',
-    'Z',
-  ];
-  vowels: string[] = ['a', 'e', 'i', 'o', 'u'];
-  compositeConsonants: string[] = [
-    'tr',
-    'bl',
-    'br',
-    'pl',
-    'pr',
-    'fl',
-    'fr',
-    'gl',
-    'gr',
-    'cl',
-    'cr',
-    'dr',
-  ];
+  readonly vowels = ['a', 'e', 'i', 'o', 'u'];
+  searchName = '';
+  courses: VowelProgress[] = [];
+  loadingProgress = false;
+  localProgressError = false;
+  nextLocalLesson = '';
 
-  constructor() {
-    this.getAllCourses();
-    this.courses = this.rawCourses;
+  constructor(public auth: AuthService, private localApi: LocalApiService) {}
+
+  ngOnInit(): void {
+    void this.refreshProgress();
   }
 
-  private getCompositeWithVowel(consonant: string): string[] {
-    return this.vowels.map((vowel) => `${consonant}${vowel}`);
+  get filteredCourses(): VowelProgress[] {
+    const search = this.searchName.trim().toLocaleLowerCase();
+    return this.courses.filter(course => `vocal ${course.letter}`.includes(search));
   }
 
-  getAllCourses() {
-    const simpleSyllables = this.consonants
-      .map((consonant) => this.getCompositeWithVowel(consonant))
-      .flat(1);
-    const compositeSyllables = this.compositeConsonants
-      .map((consonant) => this.getCompositeWithVowel(consonant))
-      .flat(1);
-    this.rawCourses = [
-      ...this.vowels,
-      ...simpleSyllables,
-      ...compositeSyllables,
-    ].map((syllable) => ({
-      syllable: syllable,
-      progress: Math.trunc(Math.random() * 5),
-      maxProgress: 5,
-    }));
-  }
-
-  filterData(syllable: string) {
-    this.courses = this.rawCourses.filter((course) =>
-      course.syllable.toLowerCase().includes(syllable.toLowerCase())
-    );
+  async refreshProgress(): Promise<void> {
+    const subject = this.auth.localSubject;
+    if (!subject) return;
+    this.loadingProgress = true;
+    this.localProgressError = false;
+    try {
+      const completed = new Set(await this.localApi.completedLessons(subject));
+      this.courses = this.vowels.map(letter => ({ letter, completed: completed.has(letter) }));
+      this.nextLocalLesson = this.vowels.find(letter => !completed.has(letter))?.toUpperCase() ?? 'Completadas';
+    } catch (error) {
+      console.error('No se pudo cargar el progreso local:', error);
+      this.localProgressError = true;
+    } finally {
+      this.loadingProgress = false;
+    }
   }
 }

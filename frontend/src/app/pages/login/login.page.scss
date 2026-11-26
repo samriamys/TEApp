@@ -1,16 +1,25 @@
 .role-page { --background: #f7f9fc; }
-.role-shell { box-sizing: border-box; min-height: 100%; max-width: 440px; margin: auto; padding: max(60px, 12vh) 7% 36px; display: flex; flex-direction: column; align-items: center; font-family: Poppins, sans-serif; }
+.role-shell { box-sizing: border-box; min-height: 100%; width: 100%; margin: auto; padding: max(60px, 12vh) 7% 36px; display: flex; flex-direction: column; align-items: center; font-family: Poppins, sans-serif; }
 header { text-align: center; color: #7e8494; }
 h1 { margin: 0; font-size: 28px; font-weight: 600; }
 header p { margin: 0; font-size: 20px; }
-.roles { margin-top: 15vh; padding: 0; border: 0; width: 100%; border-radius: 14px; background: #fff; box-shadow: 0 0 20px #0000001a; }
-.roles label { display: flex; align-items: center; justify-content: center; width: 100%; height: 96px; border-radius: 14px; color: #000; font: 600 24px Poppins, sans-serif; letter-spacing: .05em; cursor: pointer; }
-.roles label.selected { background: #7da2ff; color: #fff; box-shadow: 0 5px 10px 2px #7da2ff66; }
+.roles { position: relative; margin-top: 15vh; padding: 0; border: 0; width: 100%; border-radius: 14px; background: #fff; box-shadow: 0 0 20px #0000001a; }
+.roles::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 96px; border-radius: 14px; background: #7da2ff; box-shadow: 0 5px 10px 2px #7da2ff66; transition: transform 280ms ease; }
+.roles.tutor-selected::before { transform: translateY(100%); }
+.roles label { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 96px; border-radius: 14px; color: #000; font: 600 24px Poppins, sans-serif; letter-spacing: .05em; cursor: pointer; transition: color 200ms ease; }
+.roles label.selected { color: #fff; }
 .roles input { position: absolute; opacity: 0; }
 .roles label:has(input:focus-visible) { outline: 3px solid #315bc4; outline-offset: 3px; }
 .next { position: relative; margin-top: 12vh; width: 75%; min-height: 58px; padding: 0 50px; border: 0; border-radius: 100px; background: #7da2ff; color: white; font: 600 18px Poppins, sans-serif; box-shadow: 0 5px 10px 2px #7da2ff66; }
 .next img { position: absolute; right: 7px; top: 50%; transform: translateY(-50%) scale(.35); transform-origin: right center; }
 .signin { margin-top: 20px; text-align: center; color: #7e8494; font-size: 14px; }
-.signin button { display: block; background: none; border: 0; margin: 3px auto; color: #426ad1; font: 600 16px Poppins, sans-serif; }
+.signin button { display: block; background: none; border: 0; margin: 3px auto; color: #426ad1; font: 600 16px Poppins, sans-serif; word-break: normal;}
+.online { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; }
+.online span { width: 100%; }
+.online button { margin: 0; }
 .error { color: #b42318; text-align: center; }
 button:focus-visible { outline: 3px solid #315bc4; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .roles::before, .roles label { transition: none; }
+}

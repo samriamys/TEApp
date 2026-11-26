@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from '~/app/services/auth/auth.service';
+import { Router } from '@angular/router';
 
 type Role = 'student' | 'tutor';
 
@@ -14,7 +15,11 @@ type Role = 'student' | 'tutor';
 export class LoginPage {
   role: Role = 'student';
   error = false;
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private router: Router) {}
+
+  localAccess(mode: 'register' | 'login'): void {
+    void this.router.navigate(['/local-access'], { queryParams: { role: this.role, mode } });
+  }
 
   async continueRegistration() {
     this.error = false;

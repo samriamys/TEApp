@@ -1,0 +1,29 @@
+<ion-content class="local-page">
+  <main>
+    <a routerLink="/login" class="back">← Volver</a>
+    <h1>{{ mode === 'register' ? 'Crear cuenta local' : 'Iniciar sesión local' }}</h1>
+    <p class="subtitle">{{ role === 'tutor' ? 'Profesor' : 'Alumno' }}</p>
+    <form (ngSubmit)="submit()" #localForm="ngForm">
+      @if (mode === 'register') {
+        <label for="local-name">Nombre</label>
+        <input id="local-name" name="name" [(ngModel)]="name" autocomplete="name" required />
+      }
+      <label for="local-email">Correo</label>
+      <input id="local-email" name="email" [(ngModel)]="email" type="email" autocomplete="email" required email />
+      <label for="local-password">Contraseña</label>
+      <input id="local-password" name="password" [(ngModel)]="password" type="password" [attr.autocomplete]="mode === 'register' ? 'new-password' : 'current-password'" minlength="8" required />
+      @if (mode === 'register') {
+        <label for="local-confirm">Confirmar contraseña</label>
+        <input id="local-confirm" name="confirmPassword" [(ngModel)]="confirmPassword" type="password" autocomplete="new-password" minlength="8" required />
+        @if (role === 'student') {
+          <label for="local-tutor-code">Código de profesor</label>
+          <input id="local-tutor-code" name="tutorCode" [(ngModel)]="tutorCode" autocomplete="off" required />
+          <p class="hint">Usa el código de un profesor registrado en este dispositivo.</p>
+        }
+      }
+      @if (error) { <p class="error" role="alert">{{ error }}</p> }
+      <button class="submit" type="submit" [disabled]="working || localForm.invalid">{{ working ? 'Un momento…' : mode === 'register' ? 'Registrarse' : 'Iniciar sesión' }}</button>
+    </form>
+    <button type="button" class="switch" (click)="switchMode()">{{ mode === 'register' ? 'Ya tengo una cuenta local' : 'Crear una cuenta local' }}</button>
+  </main>
+</ion-content>

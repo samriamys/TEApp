@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ActivityCompleteComponent } from '~/app/learning/activity-complete.component';
+import { VOWELS } from '~/app/learning/learning.models';
 
 @Component({
   selector: 'app-lessons-complete',
   templateUrl: './lessons-complete.component.html',
-  styleUrls: ['./lessons-complete.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterModule],
+  imports: [IonicModule, ActivityCompleteComponent],
 })
 export class LessonsCompleteComponent implements OnInit {
-  letra: string = 'a';
-
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    this.letra = this.route.snapshot.queryParamMap.get('letra') || 'a';
+  letra = 'a';
+  constructor(private route: ActivatedRoute, private router: Router) {}
+  ngOnInit(): void { this.letra = this.route.snapshot.queryParamMap.get('letra')?.toLowerCase() || 'a'; }
+  retry(): void {
+    const route = (VOWELS as readonly string[]).includes(this.letra)
+      ? ['/lessons/Vocales', this.letra.toUpperCase(), this.letra]
+      : ['/lessons/letras', this.letra];
+    void this.router.navigate(route);
   }
 }

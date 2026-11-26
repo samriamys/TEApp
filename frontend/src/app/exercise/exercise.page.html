@@ -1,11 +1,13 @@
-@for(exercise of exercises; track $index) { @if($index === currentIndex){
-<app-generic-exercise
-  *ngIf="!allCompleted && exercises.length > 0"
-  [exercise]="exercises[currentIndex]"
-  (success)="next()"
->
-</app-generic-exercise>
-
-} } @if (allCompleted) {
-<app-exercise-complete></app-exercise-complete>
-}
+<ion-content>
+  @if (loadState !== 'ready') {
+    <app-learning-status [state]="loadState" backRoute="/exercise" backLabel="Volver a ejercicios" (retry)="cargarEjercicios()"></app-learning-status>
+  } @else if (allCompleted) {
+    <app-exercise-complete [embedded]="true" [letter]="letraSeleccionada" (retry)="restart()"></app-exercise-complete>
+  } @else if (saving) {
+    <p role="status">Guardando progreso…</p>
+  } @else if (saveError) {
+    <div role="alert"><p>No se pudo guardar tu progreso en este dispositivo.</p><button type="button" (click)="finishExercise()">Reintentar</button></div>
+  } @else {
+    <app-generic-exercise [exercise]="exercises[currentIndex]" (answered)="recordAnswer($event)" (success)="next()"></app-generic-exercise>
+  }
+</ion-content>

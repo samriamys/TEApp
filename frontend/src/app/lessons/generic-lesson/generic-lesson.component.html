@@ -1,17 +1,25 @@
 <ion-content>
 
+  <app-learning-status *ngIf="loadState !== 'ready'" [state]="loadState" (retry)="cargarPalabras()"></app-learning-status>
+
   <div class="lessons-container" *ngIf="currentLesson">
+
+    <div *ngIf="saveError" class="lesson-status" role="alert">
+      <p>No se pudo guardar tu progreso en este dispositivo.</p>
+      <button type="button" (click)="terminarLeccion()">Reintentar</button>
+    </div>
+    <p *ngIf="saving" role="status">Guardando progreso…</p>
 
     <ion-progress-bar
       class="ion-progress-bar"
       [value]="getProgress()">
     </ion-progress-bar>
 
-    <div class="center-box" (click)="handleClick()">
+    <div class="center-box" *ngIf="!saveError && !saving" (click)="handleClick()">
 
       <img
-        [src]="currentLesson.imageUrl"
-        [alt]="currentLesson.completeText"
+        [appWordImage]="currentLesson.imageUrl"
+        [imageDescription]="currentLesson.completeText"
       />
 
       <div class="word-display-container">
@@ -19,6 +27,7 @@
           {{ currentLesson.completeText }}
         </div>
       </div>
+      <p *ngIf="audioUnavailable" class="media-message" role="status">Audio no disponible en este dispositivo.</p>
 
     </div>
 

@@ -1,4 +1,24 @@
-<div class="logout-container">
-  <h1>¿Estas seguro de que deseas salir?</h1>
-  <ion-button expand="block" (click)="logout()">Cerrar sesión</ion-button>
-</div>
+<ion-content class="logout-page">
+  <main class="logout-shell">
+    <section class="logout-card" aria-labelledby="logout-title">
+      <div class="logout-icon" aria-hidden="true">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </div>
+      <p class="eyebrow">TU CUENTA TE ESPERA</p>
+      <h1 id="logout-title">¿Quieres salir?</h1>
+      <p class="description">Tu progreso está guardado. Puedes volver cuando quieras.</p>
+
+      @if (error) { <p class="error" role="alert">{{ error }}</p> }
+
+      <div class="actions">
+        <button class="stay-button" type="button" (click)="cancel()" [disabled]="working">
+          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+          <span>Seguir aprendiendo</span>
+        </button>
+        <button class="logout-button" type="button" (click)="logout()" [disabled]="working">
+          <span>{{ working ? 'Cerrando sesión…' : 'Cerrar sesión' }}</span>
+        </button>
+      </div>
+    </section>
+  </main>
+</ion-content>

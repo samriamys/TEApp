@@ -1,63 +1,43 @@
-<div class="profile-container">
-  <div class="button-container">
-    <ion-button fill="clear" form="round">
-      <img
-        src="/assets/icon/config.svg"
-        alt="Profile Picture"
-        class="config-button"
-      />
-    </ion-button>
+<section class="profile-container" aria-label="Perfil del tutor">
+  <div class="profile-heading">
+    <h1>Perfil</h1>
+    <button class="settings-button" type="button" aria-label="Configuración" disabled>
+      <img src="assets/profile/settings.svg" alt="" />
+    </button>
   </div>
+
   <div class="profile-info">
-    <img
-      src="/assets/icon/user-thumbnail.svg"
-      alt="Profile Picture"
-      class="profile-picture"
-    />
+    <img src="assets/profile/tutor.svg" alt="" class="profile-picture" />
     <div class="details-container">
-      <h2 class="headers name-header">{{profile?.name}}</h2>
-      <h3 class="sub-header headers">{{profile?.email}}</h3>
+      <h2>{{ profile?.name }}</h2>
+      <p>{{ profile?.email }}</p>
     </div>
   </div>
 
   <div class="user-code">
-    <h3 class="sub-header headers">Código de tutor</h3>
-    <ion-input [value]="profile?.tutorCode || ''" readonly fill="outline" class="round-input"></ion-input>
+    <span>Código de tutor</span>
+    <output class="code-value">{{ profile?.tutorCode }}</output>
   </div>
 
-  <div class="user-code">
-    <ion-input
-      inputmode="search"
-      fill="outline"
-      class="round-input search-input"
-      [(ngModel)]="searchName"
-      (ngModelChange)="filterData(searchName)"
-    >
-      <ion-icon
-        slot="start"
-        name="search-outline"
-        slot="start"
-        class="search-icon"
-        size="large"
-      ></ion-icon>
-    </ion-input>
-  </div>
-</div>
-<div class="student-list-container">
-  @if (loadError) { <p role="alert">No se pudo cargar la lista de alumnos.</p> }
-  @for (student of studentsData; track $index) {
-  <ion-card class="student-card">
-    <div class="profile-info">
-      <img
-        src="/assets/icon/user-thumbnail.svg"
-        alt="Profile Picture"
-        class="student-picture"
-      />
+  <label class="search-field">
+    <img src="assets/profile/search.svg" alt="" />
+    <span class="visually-hidden">Buscar alumno</span>
+    <input type="search" placeholder="Buscar alumno" [(ngModel)]="searchName" (ngModelChange)="filterData(searchName)" />
+  </label>
+</section>
+
+<section class="student-list-container" aria-label="Alumnos">
+  @if (loadError) { <p class="message" role="alert">No se pudo cargar la lista de alumnos.</p> }
+  @for (student of studentsData; track student.email) {
+    <article class="student-card">
+      <img src="assets/profile/student.svg" alt="" class="student-picture" />
       <div class="student-details-container">
-        <h2 class="headers name-header">{{student.name}}</h2>
+        <h2>{{ student.name }}</h2>
         <p>{{ student.email }}</p>
       </div>
-    </div>
-  </ion-card>
+    </article>
   }
-</div>
+  @if (!loadError && studentsData.length === 0) {
+    <p class="message">No hay alumnos para mostrar.</p>
+  }
+</section>

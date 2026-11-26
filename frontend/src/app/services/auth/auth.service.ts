@@ -7,6 +7,7 @@ import Keycloak from 'keycloak-js';
 import { SecureStorage } from '@aparajita/capacitor-secure-storage';
 import { environment } from '~/environments/environment';
 import { apiUrl } from '../api-url';
+import { LocalApiService, LocalProfile, LocalRole } from '~/app/local-api/local-api.service';
 
 type JwtClaims = Record<string, unknown> & {
   exp?: number;
@@ -33,9 +34,9 @@ export type User = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router, private readonly localApi: LocalApiService) {}
 
-  private readonly keycloak = new Keycloak({
+  private keycloak = new Keycloak({
     url: environment.keycloakUrl,
     realm: 'teapp',
     clientId: 'teapp-web',
@@ -51,6 +52,11 @@ export class AuthService {
   private pendingNativeAuth?: PendingNativeAuth;
   private nativeAuthCallbackHandled = false;
   private nativeLogoutResolver?: () => void;
+  private localProfile?: LocalProfile;
+  private keycloakInitialized = false;
+
+  get isLocal(): boolean { return !!this.localProfile; }
+  get localSubject(): string | undefined { return this.localProfile?.subject; }
 
   get isNative(): boolean { return Capacitor.getPlatform() === 'android'; }
 
@@ -59,6 +65,12 @@ export class AuthService {
   }
 
   async initialize(): Promise<void> {
+    try {
+      const localSubject = await SecureStorage.get('teapp.localSubject');
+      if (typeof localSubject === 'string') this.localProfile = await this.localApi.profile(localSubject);
+    } catch (error) {
+      console.error('No se pudo abrir el perfil local:', error);
+    }
     if (this.isNative) {
       await App.addListener('appUrlOpen', event => this.handleNativeUrl(event.url));
       await Browser.addListener('browserFinished', () => {
@@ -71,6 +83,7 @@ export class AuthService {
           pending.reject(new Error('Se canceló el inicio de sesión.'));
         }
       });
+      if (this.isLocal) return;
       const [refreshToken, accessToken, idToken] = await Promise.all([
         SecureStorage.get('teapp.refreshToken'),
         SecureStorage.get('teapp.accessToken'),
@@ -85,16 +98,28 @@ export class AuthService {
       if (launch?.url) this.handleNativeUrl(launch.url);
       return;
     }
-    try {
-      await this.keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false, pkceMethod: 'S256' });
-    } catch {
-      this.available = false;
+    if (!this.isLocal && sessionStorage.getItem('teapp.onlineMode') === '1') {
+      try { await this.initializeOnline(true); } catch { /* Local accounts remain available. */ }
     }
   }
 
-  get isAuthenticated(): boolean { return this.isNative ? !!this.nativeRefreshToken : !!this.keycloak.authenticated; }
+  private async initializeOnline(checkSso = false): Promise<void> {
+    if (this.keycloakInitialized) return;
+    try {
+      await this.keycloak.init({ onLoad: checkSso ? 'check-sso' : undefined, checkLoginIframe: false, pkceMethod: 'S256' });
+      this.keycloakInitialized = true;
+      this.available = true;
+    } catch (error) {
+      this.available = false;
+      this.keycloak = new Keycloak({ url: environment.keycloakUrl, realm: 'teapp', clientId: 'teapp-web' });
+      throw error;
+    }
+  }
+
+  get isAuthenticated(): boolean { return this.isLocal || (this.isNative ? !!this.nativeRefreshToken : !!this.keycloak.authenticated); }
 
   get profile(): User | undefined {
+    if (this.localProfile) return this.localProfile;
     const claims = this.isNative ? this.nativeClaims : this.keycloak.tokenParsed as JwtClaims | undefined;
     if (!this.isAuthenticated || !claims) return undefined;
     return {
@@ -107,6 +132,7 @@ export class AuthService {
   }
 
   async ensureProfile(tutorCode?: string): Promise<boolean> {
+    if (this.isLocal) return true;
     if (this.appProfile) return true;
     const token = await this.accessToken();
     if (!token) return false;
@@ -132,17 +158,40 @@ export class AuthService {
     }
   }
 
-  login(role?: 'student' | 'tutor'): Promise<void> {
+  async login(role?: 'student' | 'tutor'): Promise<void> {
     if (this.isNative) return this.nativeAuthenticate(role, false);
+    sessionStorage.setItem('teapp.onlineMode', '1');
+    await this.initializeOnline();
     return this.keycloak.login({ redirectUri: `${window.location.origin}/profile`, loginHint: role ? `teapp:${role}` : undefined, locale: 'es' });
   }
 
-  register(role?: 'student' | 'tutor'): Promise<void> {
+  async register(role?: 'student' | 'tutor'): Promise<void> {
     if (this.isNative) return this.nativeAuthenticate(role, true);
+    sessionStorage.setItem('teapp.onlineMode', '1');
+    await this.initializeOnline();
     return this.keycloak.register({ redirectUri: `${window.location.origin}/profile`, loginHint: role ? `teapp:${role}` : undefined, locale: 'es' });
   }
 
+  async registerLocal(input: { name: string; email: string; password: string; role: LocalRole; tutorCode?: string }): Promise<void> {
+    const profile = await this.localApi.register(input);
+    await this.startLocalSession(profile);
+  }
+
+  async loginLocal(email: string, password: string, role: LocalRole): Promise<void> {
+    await this.startLocalSession(await this.localApi.login(email, password, role));
+  }
+
+  private async startLocalSession(profile: LocalProfile): Promise<void> {
+    if (this.isNative) await this.clearNativeTokens();
+    else if (this.keycloak.authenticated) this.keycloak.clearToken();
+    await SecureStorage.set('teapp.localSubject', profile.subject);
+    this.localProfile = profile;
+    this.appProfile = undefined;
+    sessionStorage.removeItem('teapp.onlineMode');
+  }
+
   async accessToken(): Promise<string | undefined> {
+    if (this.isLocal) return undefined;
     if (this.isNative) {
       if (this.nativeAccessToken && (this.nativeClaims?.exp ?? 0) > Math.floor(Date.now() / 1000) + 30) {
         return this.nativeAccessToken;
@@ -165,6 +214,11 @@ export class AuthService {
 
   logout(): Promise<void> {
     this.appProfile = undefined;
+    if (this.isLocal) {
+      this.localProfile = undefined;
+      return SecureStorage.remove('teapp.localSubject').then(() => undefined);
+    }
+    sessionStorage.removeItem('teapp.onlineMode');
     if (this.isNative) return this.logoutNative();
     return this.keycloak.logout({ redirectUri: `${window.location.origin}/login` });
   }

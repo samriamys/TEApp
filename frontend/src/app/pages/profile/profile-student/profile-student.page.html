@@ -1,63 +1,65 @@
-<div class="profile-container">
-  <div class="button-container">
-    <ion-button fill="clear" form="round">
-      <img
-        src="/assets/icon/config.svg"
-        alt="Profile Picture"
-        class="config-button"
-      />
-    </ion-button>
-  </div>
+<section class="profile-container" aria-label="Perfil del alumno">
+  <h1>Perfil Alumno</h1>
+
   <div class="profile-info">
-    <img
-      src="/assets/icon/user-thumbnail.svg"
-      alt="Profile Picture"
-      class="profile-picture"
-    />
-    <div class="details-container">
-      <h2 class="headers name-header">{{profile?.name}}</h2>
-      <h3 class="sub-header headers">{{profile?.email}}</h3>
+    <img src="assets/profile/student.svg" alt="" class="profile-picture" />
+    <div class="profile-details">
+      <h2>{{ profile?.name }}</h2>
+      <p>{{ profile?.email }}</p>
     </div>
   </div>
 
-  <div class="user-code">
-    <h3 class="sub-header headers">Fase ubicado</h3>
-    <h3 class="sub-header headers phase">ch</h3>
-  </div>
-
-  <div class="user-code">
-    <ion-input
-      inputmode="search"
-      fill="outline"
-      class="round-input search-input"
-      [(ngModel)]="searchName"
-      (ngModelChange)="filterData(searchName)"
-    >
-      <ion-icon
-        slot="start"
-        name="search-outline"
-        slot="start"
-        class="search-icon"
-        size="large"
-      ></ion-icon>
-    </ion-input>
-  </div>
-</div>
-<div class="course-list-container">
-  @for (course of courses; track $index) {
-  <ion-card class="course-card">
-    <div class="profile-info">
-      <span class="course-thumbnail">{{course.syllable}}</span>
-      <div class="course-details-container">
-        {{ course.progress + ' / ' + course.maxProgress }}
-        <div class="progress-bar-container">
-          <ion-progress-bar
-            [value]="(course.progress / course.maxProgress)"
-            class="vertical-progress-bar"
-          ></ion-progress-bar>
-        </div>
-      </div>
+  @if (auth.isLocal && !loadingProgress && !localProgressError) {
+    <div class="next-lesson">
+      <span>Siguiente vocal</span>
+      <strong>{{ nextLocalLesson }}</strong>
     </div>
-  </ion-card>
   }
-</div>
+</section>
+
+<section class="progress-section" aria-labelledby="progress-heading">
+  <div class="section-heading">
+    <div>
+      <h2 id="progress-heading">Mi progreso</h2>
+      <p>Lecciones de vocales</p>
+    </div>
+    @if (auth.isLocal && !loadingProgress && !localProgressError) {
+      <span class="category-label">Vocales</span>
+    }
+  </div>
+
+  @if (auth.isLocal) {
+    @if (loadingProgress) {
+      <p class="message" role="status">Cargando progreso…</p>
+    } @else if (localProgressError) {
+      <div class="message" role="alert">
+        <p>No se pudo cargar el progreso local.</p>
+        <button type="button" class="retry-button" (click)="refreshProgress()">Reintentar</button>
+      </div>
+    } @else {
+      <label class="search-field">
+        <img src="assets/profile/search.svg" alt="" />
+        <span class="visually-hidden">Buscar vocal</span>
+        <input type="search" placeholder="Buscar vocal" [(ngModel)]="searchName" />
+      </label>
+
+      <div class="course-list">
+        @for (course of filteredCourses; track course.letter) {
+          <a class="course-card" [routerLink]="['/lessons/Vocales', course.letter.toUpperCase(), course.letter]">
+            <span class="course-thumbnail" aria-hidden="true">{{ course.letter.toUpperCase() }}</span>
+            <div class="course-details">
+              <h3>Vocal {{ course.letter.toUpperCase() }}</h3>
+              <p>{{ course.completed ? 'Lección completada' : 'Por completar' }}</p>
+              <div class="progress-track" aria-hidden="true"><span [class.completed]="course.completed"></span></div>
+            </div>
+            <span class="course-status" [class.completed]="course.completed">{{ course.completed ? '1 / 1' : '0 / 1' }}</span>
+          </a>
+        } @empty {
+          <p class="message">No se encontraron vocales para esa búsqueda.</p>
+        }
+      </div>
+    }
+  } @else {
+    <p class="message">El progreso de las cuentas en línea todavía no está disponible.</p>
+  }
+</section>

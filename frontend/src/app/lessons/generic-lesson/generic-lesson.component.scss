@@ -1,3 +1,22 @@
+.lesson-status {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  background: #f8f9fd;
+  color: #343946;
+  text-align: center;
+  font-family: Poppins, sans-serif;
+}
+
+.lesson-status h1, .lesson-status p { margin: 0; }
+.lesson-status h1 { font-size: 22px; }
+.lesson-status button { padding: 12px 24px; border: 0; border-radius: 999px; background: #7da2ff; color: #fff; font: 600 16px Poppins, sans-serif; cursor: pointer; }
+.lesson-status button:focus-visible { outline: 3px solid #426ad1; outline-offset: 3px; }
+
 .lessons-container { 
   display: flex;
   flex-direction: column;
@@ -15,8 +34,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
-  height: 450px;
+  width: 86%;
+  min-height: 40vh;
   background-color: transparent;
   border-radius: 12px;
   cursor: pointer;
@@ -30,9 +49,11 @@
 
 .center-box img {
   max-width: 100%;
-  max-height: 70%;
+  max-height: 42vh;
   object-fit: contain;
 }
+
+.media-message { color: #626a7b; font-size: 14px; }
 
 .word-display-container {
   width: 100%;

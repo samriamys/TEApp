@@ -1,21 +1,13 @@
 <ion-content>
-  <div *ngIf="isLoading" class="ion-text-center">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando examen...</p>
-  </div>
-
-  <app-generic-exam
-    *ngIf="!isLoading && exercises.length > 0 && !examCompleted"
-    [exercises]="exercises"
-    (finished)="onExamFinished($event)"
-  >
-  </app-generic-exam>
-
-  <app-exam-complete
-    *ngIf="examCompleted"
-    [score]="score"
-    [total]="total"
-    [letra]="letraSeleccionada"
-  >
-  </app-exam-complete>
+  @if (loadState !== 'ready') {
+    <app-learning-status [state]="loadState" backRoute="/exam" backLabel="Volver a exámenes" (retry)="cargarExamen()"></app-learning-status>
+  } @else if (examCompleted) {
+    <app-exam-complete [score]="score" [total]="total" [letra]="letraSeleccionada" (retry)="restart()"></app-exam-complete>
+  } @else if (saving) {
+    <p role="status">Guardando resultado…</p>
+  } @else if (saveError) {
+    <div role="alert"><p>No se pudo guardar tu resultado en este dispositivo.</p><button type="button" (click)="onExamFinished({ score: score, total: total })">Reintentar</button></div>
+  } @else {
+    <app-generic-exam [exercises]="exercises" (answered)="recordAnswer($event)" (finished)="onExamFinished($event)"></app-generic-exam>
+  }
 </ion-content>

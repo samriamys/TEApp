@@ -1,24 +1,45 @@
-ion-content {
-  --background: #f7f9fc;
+ion-content.logout-page { --background: #f7f9fc; color-scheme: light; }
+
+.logout-shell {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100%;
+  padding: clamp(20px, 5vw, 56px);
+  font-family: Poppins, sans-serif;
 }
 
-h1 {
-  color: #fff;
-  font-family: "Poppins-Medium", sans-serif;
-  font-size: 24px;
+.logout-card {
+  box-sizing: border-box;
+  width: min(100%, 560px);
+  padding: clamp(28px, 6vw, 56px);
+  border-radius: 28px;
+  background: #fff;
   text-align: center;
-  margin-bottom: 24px;
+  box-shadow: 0 12px 36px rgb(35 49 88 / 10%);
 }
 
-ion-button {
-  margin-top: 24px;
+.logout-icon {
+  display: grid;
+  place-items: center;
+  width: clamp(72px, 12vw, 96px);
+  margin: 0 auto 22px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #dae0f0;
+  color: #7da2ff;
 }
 
-.logout-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  padding: 20px;
-}
+.logout-icon ion-icon { font-size: clamp(36px, 6vw, 48px); }
+.eyebrow { margin: 0 0 8px; color: #426ad1; font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+h1 { margin: 0; color: #252938; font-size: clamp(26px, 5vw, 38px); line-height: 1.2; font-weight: 600; }
+.description { max-width: 34ch; margin: 14px auto 28px; color: #6d7484; font-size: clamp(14px, 2vw, 16px); line-height: 1.6; }
+.actions { display: grid; gap: 12px; }
+.actions button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 52px; padding: 12px 20px; border: 0; border-radius: 999px; font: 600 15px Poppins, sans-serif; cursor: pointer; }
+.stay-button { background: #7da2ff; color: #fff; box-shadow: 0 5px 12px rgb(125 162 255 / 28%); }
+.stay-button ion-icon { font-size: 20px; }
+.logout-button { background: #eef1f8; color: #596174; }
+.actions button:disabled { opacity: .65; cursor: wait; }
+.actions button:focus-visible { outline: 3px solid #426ad1; outline-offset: 3px; }
+.error { margin: 0 0 18px; color: #b42318; font-size: 14px; }

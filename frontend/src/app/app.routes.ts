@@ -5,16 +5,28 @@ export const routes: Routes = [
   {
     path: 'lessons',
     loadComponent: () =>
-      import('~/app/lessons/lessons.page').then((m) => m.LessonsPage),
+      import('~/app/learning/activity-map.page').then((m) => m.ActivityMapPage),
     canActivate: [AuthGuardService],
   },
   {
     path: 'exam',
+    loadComponent: () => import('~/app/learning/activity-map.page').then((m) => m.ActivityMapPage),
+    data: { kind: 'exam' },
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'exam/:letra',
     loadComponent: () => import('~/app/exam/exam.page').then((m) => m.ExamPage),
     canActivate: [AuthGuardService],
   },
   {
     path: 'exercise',
+    loadComponent: () => import('~/app/learning/activity-map.page').then((m) => m.ActivityMapPage),
+    data: { kind: 'exercise' },
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'exercise/:letra',
     loadComponent: () =>
       import('~/app/exercise/exercise.page').then((m) => m.ExercisePage),
     canActivate: [AuthGuardService],
@@ -41,7 +53,20 @@ export const routes: Routes = [
       import('~/app/pages/register/register.page').then((m) => m.RegisterPage),
   },
   {
+    path: 'local-access',
+    loadComponent: () =>
+      import('~/app/pages/local-access/local-access.page').then((m) => m.LocalAccessPage),
+  },
+  {
     path: 'lessons/Vocales/:mayuscula/:letra',
+    canActivate: [AuthGuardService],
+    loadComponent: () =>
+      import('~/app/lessons/generic-lesson/generic-lesson.component').then(
+        (m) => m.GenericLessonsComponent,
+      ),
+  },
+  {
+    path: 'lessons/letras/:letra',
     canActivate: [AuthGuardService],
     loadComponent: () =>
       import('~/app/lessons/generic-lesson/generic-lesson.component').then(

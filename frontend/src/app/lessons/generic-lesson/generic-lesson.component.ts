@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PalabraService } from 'src/app/services/palabra.service';
+import { LearningContentService, sample } from '~/app/learning/learning-content.service';
+import { ActivityProgressService } from '~/app/learning/activity-progress.service';
+import { LearningStatusComponent, LoadState } from '~/app/learning/learning-status.component';
+import { WordImageDirective } from '~/app/learning/word-image.directive';
+import { WordAudioService } from '~/app/learning/word-audio.service';
 
 export type Lessons = {
   completeText: string;
-  imageUrl: string;
-  audioUrl: string;
+  imageUrl: string | null;
+  audioUrl: string | null;
 };
 
 @Component({
@@ -16,69 +20,78 @@ export type Lessons = {
   templateUrl: './generic-lesson.component.html',
   styleUrls: ['./generic-lesson.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, LearningStatusComponent, WordImageDirective],
 })
-export class GenericLessonsComponent implements OnInit {
+export class GenericLessonsComponent implements OnInit, OnDestroy {
   lessonsList: Lessons[] = [];
   letraSeleccionada: string = 'a';
 
   currentIndex: number = 0;
   clickCount: number = 0;
-  totalLessons: number = 0;
   isFinished: boolean = false;
-
-  @Output() success = new EventEmitter<void>();
+  loadState: LoadState = 'loading';
+  private routeSubscription?: Subscription;
+  private wordsSubscription?: Subscription;
+  saveError = false;
+  saving = false;
+  audioUnavailable = false;
+  private completionId = '';
+  private sessionId = '';
 
   constructor(
-    private palabraService: PalabraService,
+    private content: LearningContentService,
     private router: Router,
     private route: ActivatedRoute,
+    private progress: ActivityProgressService,
+    private media: WordAudioService,
+    private zone: NgZone,
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
+    this.routeSubscription = this.route.paramMap.subscribe((params) => {
       this.letraSeleccionada = params.get('letra')?.toLowerCase() || 'a';
       this.reiniciarLeccion();
       this.cargarPalabras();
     });
   }
 
+  ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe();
+    this.wordsSubscription?.unsubscribe();
+    this.media.stop();
+  }
+
   reiniciarLeccion() {
     this.currentIndex = 0;
     this.clickCount = 0;
-    this.totalLessons = 0;
     this.isFinished = false;
     this.lessonsList = [];
+    this.saveError = false;
+    this.saving = false;
+    this.completionId = '';
+    this.sessionId = '';
+    this.audioUnavailable = false;
   }
 
   cargarPalabras() {
-    forkJoin({
-      dificultad1: this.palabraService.getPalabras(this.letraSeleccionada, 1),
-      dificultad2: this.palabraService.getPalabras(this.letraSeleccionada, 2),
-      dificultad3: this.palabraService.getPalabras(this.letraSeleccionada, 3),
-    }).subscribe({
+    this.wordsSubscription?.unsubscribe();
+    this.loadState = 'loading';
+    this.wordsSubscription = this.content.load(this.letraSeleccionada).subscribe({
       next: (data) => {
         const palabraInicial = data.dificultad1.find(
           (p) => p.texto.toLowerCase() === this.letraSeleccionada,
         );
 
-        if (!palabraInicial) {
-          console.error(
-            `No se encontró la vocal inicial "${this.letraSeleccionada}" en dificultad 1`,
-          );
-          return;
-        }
-
         const dificultad1Filtrada = data.dificultad1.filter(
           (p) => p.texto.toLowerCase() !== this.letraSeleccionada,
         );
 
-        const otraFacil = this.obtenerAleatorias(dificultad1Filtrada, 1);
-        const nivel2 = this.obtenerAleatorias(data.dificultad2, 2);
-        const nivel3 = this.obtenerAleatorias(data.dificultad3, 2);
+        const otraFacil = sample(dificultad1Filtrada, 1);
+        const nivel2 = sample(data.dificultad2, 2);
+        const nivel3 = sample(data.dificultad3, 2);
 
         this.lessonsList = [
-          palabraInicial,
+          ...(palabraInicial ? [palabraInicial] : []),
           ...otraFacil,
           ...nivel2,
           ...nivel3,
@@ -88,16 +101,19 @@ export class GenericLessonsComponent implements OnInit {
           audioUrl: item.audio,
         }));
 
-        this.totalLessons = this.lessonsList.length;
+        this.loadState = this.lessonsList.length ? 'ready' : 'empty';
+        if (this.lessonsList.length) void this.startSession();
       },
       error: (error) => {
         console.error('Error cargando palabras:', error);
+        this.loadState = 'error';
       },
     });
   }
 
-  obtenerAleatorias(lista: any[], cantidad: number): any[] {
-    return [...lista].sort(() => Math.random() - 0.5).slice(0, cantidad);
+  private async startSession(): Promise<void> {
+    try { this.sessionId = await this.progress.start('lesson', this.letraSeleccionada, this.lessonsList.length); }
+    catch (error) { console.error('No se pudo iniciar el registro de la lección:', error); }
   }
 
   get currentLesson(): Lessons | null {
@@ -107,40 +123,56 @@ export class GenericLessonsComponent implements OnInit {
   handleClick() {
     if (!this.currentLesson || this.isFinished) return;
 
-    this.playAudio(this.currentLesson.audioUrl);
+    this.playAudio();
     this.clickCount++;
 
     if (this.clickCount >= 3) {
       this.clickCount = 0;
 
-      if (this.currentIndex < this.totalLessons - 1) {
+      if (this.currentIndex < this.lessonsList.length - 1) {
         this.currentIndex++;
+        this.audioUnavailable = false;
+        void this.progress.update(this.sessionId, this.currentIndex, this.lessonsList.length);
       } else {
         this.terminarLeccion();
       }
     }
   }
 
-  terminarLeccion() {
+  async terminarLeccion() {
+    if (this.saving) return;
     this.isFinished = true;
-    this.success.emit();
-
+    this.saveError = false;
+    this.saving = true;
+    try {
+      this.completionId ||= this.progress.newEventId();
+      await this.progress.record('lesson_completed', this.letraSeleccionada, this.completionId);
+      await this.progress.update(this.sessionId, this.lessonsList.length, this.lessonsList.length);
+      await this.progress.finishSession(this.sessionId);
+    } catch (error) {
+      console.error('No se pudo guardar el progreso:', error);
+      this.saveError = true;
+      return;
+    } finally {
+      this.saving = false;
+    }
     this.router.navigate(['/lessons-complete'], {
       queryParams: { letra: this.letraSeleccionada },
     });
   }
 
-  playAudio(audioUrl: string) {
-    const audio = new Audio(audioUrl);
-    audio.currentTime = 0;
-
-    audio.play().catch((error) => {
-      console.error('Error playing audio:', error);
-    });
+  playAudio(): void {
+    const lesson = this.currentLesson;
+    if (!lesson) return;
+    const index = this.currentIndex;
+    this.audioUnavailable = false;
+    this.media.play(lesson.audioUrl, lesson.completeText, () => this.zone.run(() => {
+      if (index === this.currentIndex) this.audioUnavailable = true;
+    }));
   }
 
   getProgress(): number {
-    if (this.totalLessons === 0) return 0;
-    return (this.currentIndex + 1) / this.totalLessons;
+    if (this.lessonsList.length === 0) return 0;
+    return (this.currentIndex + 1) / this.lessonsList.length;
   }
 }

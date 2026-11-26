@@ -1,17 +1,15 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ActivityCompleteComponent } from '~/app/learning/activity-complete.component';
 
 @Component({
   selector: 'app-exam-complete',
   templateUrl: './exam-complete.component.html',
-  styleUrls: ['./exam-complete.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule],
+  imports: [ActivityCompleteComponent],
 })
 export class ExamCompleteComponent {
-  @Input() score: number = 0;
-  @Input() total: number = 100;
-  @Input() letra: string = 'a';
+  @Input() score = 0;
+  @Input() total = 0;
+  @Input() letra = 'a';
+  @Output() retry = new EventEmitter<void>();
 }

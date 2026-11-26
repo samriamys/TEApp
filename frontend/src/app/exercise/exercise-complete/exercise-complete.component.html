@@ -1,39 +1,5 @@
-<ion-content class="ion-text-center container">
-  <ion-icon
-    name="checkmark-circle"
-    color="success"
-    style="font-size: 128px"
-  ></ion-icon>
-
-  <h1>¡Felicidades!</h1>
-  <h2>Todos los ejercicios se completaron con éxito</h2>
-
-  <p>Has hecho un gran progreso. ¡Sigue así!</p>
-
-  <div class="button-container">
-    <!-- HOME -->
-    <ion-button class="home-button" routerLink="/lessons" color="white">
-      <img src="assets/image/home.png" alt="Lecciones" />
-    </ion-button>
-
-    <!-- BACK (repite ejercicios de la misma vocal) -->
-    <ion-button
-      class="back-button"
-      [routerLink]="['/exercise']"
-      [queryParams]="{ letra: letra }"
-      color="white"
-    >
-      <img src="assets/image/back.png" alt="Repetir ejercicios" />
-    </ion-button>
-
-    <!-- NEXT (examen con misma vocal) -->
-    <ion-button
-      class="next-button"
-      [routerLink]="['/exam']"
-      [queryParams]="{ letra: letra }"
-      color="white"
-    >
-      <img src="assets/image/next.png" alt="Examen" />
-    </ion-button>
-  </div>
-</ion-content>
+@if (embedded) {
+  <app-activity-complete kind="exercise" [letter]="letter" (retry)="repeat()"></app-activity-complete>
+} @else {
+  <ion-content><app-activity-complete kind="exercise" [letter]="letter" (retry)="repeat()"></app-activity-complete></ion-content>
+}

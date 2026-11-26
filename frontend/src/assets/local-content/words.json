@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "words": [
+    {
+      "id": -1001,
+      "texto": "a",
+      "vocal": "a",
+      "dificultad": 1,
+      "imagen": "assets/local-content/a-0.svg",
+      "audio": "assets/local-content/a-0.wav"
+    },
+    {
+      "id": -1002,
+      "texto": "ala",
+      "vocal": "a",
+      "dificultad": 1,
+      "imagen": "assets/local-content/a-1.svg",
+      "audio": "assets/local-content/a-1.wav"
+    },
+    {
+      "id": -1003,
+      "texto": "abeja",
+      "vocal": "a",
+      "dificultad": 1,
+      "imagen": "assets/local-content/a-2.svg",
+      "audio": "assets/local-content/a-2.wav"
+    },
+    {
+      "id": -1004,
+      "texto": "casa",
+      "vocal": "a",
+      "dificultad": 2,
+      "imagen": "assets/local-content/a-3.svg",
+      "audio": "assets/local-content/a-3.wav"
+    },
+    {
+      "id": -1005,
+      "texto": "gato",
+      "vocal": "a",
+      "dificultad": 2,
+      "imagen": "assets/local-content/a-4.svg",
+      "audio": "assets/local-content/a-4.wav"
+    },
+    {
+      "id": -1006,
+      "texto": "manzana",
+      "vocal": "a",
+      "dificultad": 3,
+      "imagen": "assets/local-content/a-5.svg",
+      "audio": "assets/local-content/a-5.wav"
+    },
+    {
+      "id": -1007,
+      "texto": "e",
+      "vocal": "e",
+      "dificultad": 1,
+      "imagen": "assets/local-content/e-0.svg",
+      "audio": "assets/local-content/e-0.wav"
+    },
+    {
+      "id": -1008,
+      "texto": "estrella",
+      "vocal": "e",
+      "dificultad": 1,
+      "imagen": "assets/local-content/e-1.svg",
+      "audio": "assets/local-content/e-1.wav"
+    },
+    {
+      "id": -1009,
+      "texto": "elefante",
+      "vocal": "e",
+      "dificultad": 1,
+      "imagen": "assets/local-content/e-2.svg",
+      "audio": "assets/local-content/e-2.wav"
+    },
+    {
+      "id": -1010,
+      "texto": "mesa",
+      "vocal": "e",
+      "dificultad": 2,
+      "imagen": "assets/local-content/e-3.svg",
+      "audio": "assets/local-content/e-3.wav"
+    },
+    {
+      "id": -1011,
+      "texto": "leche",
+      "vocal": "e",
+      "dificultad": 2,
+      "imagen": "assets/local-content/e-4.svg",
+      "audio": "assets/local-content/e-4.wav"
+    },
+    {
+      "id": -1012,
+      "texto": "tren",
+      "vocal": "e",
+      "dificultad": 3,
+      "imagen": "assets/local-content/e-5.svg",
+      "audio": "assets/local-content/e-5.wav"
+    },
+    {
+      "id": -1013,
+      "texto": "i",
+      "vocal": "i",
+      "dificultad": 1,
+      "imagen": "assets/local-content/i-0.svg",
+      "audio": "assets/local-content/i-0.wav"
+    },
+    {
+      "id": -1014,
+      "texto": "isla",
+      "vocal": "i",
+      "dificultad": 1,
+      "imagen": "assets/local-content/i-1.svg",
+      "audio": "assets/local-content/i-1.wav"
+    },
+    {
+      "id": -1015,
+      "texto": "imán",
+      "vocal": "i",
+      "dificultad": 1,
+      "imagen": "assets/local-content/i-2.svg",
+      "audio": "assets/local-content/i-2.wav"
+    },
+    {
+      "id": -1016,
+      "texto": "libro",
+      "vocal": "i",
+      "dificultad": 2,
+      "imagen": "assets/local-content/i-3.svg",
+      "audio": "assets/local-content/i-3.wav"
+    },
+    {
+      "id": -1017,
+      "texto": "pirata",
+      "vocal": "i",
+      "dificultad": 2,
+      "imagen": "assets/local-content/i-4.svg",
+      "audio": "assets/local-content/i-4.wav"
+    },
+    {
+      "id": -1018,
+      "texto": "camisa",
+      "vocal": "i",
+      "dificultad": 3,
+      "imagen": "assets/local-content/i-5.svg",
+      "audio": "assets/local-content/i-5.wav"
+    },
+    {
+      "id": -1019,
+      "texto": "o",
+      "vocal": "o",
+      "dificultad": 1,
+      "imagen": "assets/local-content/o-0.svg",
+      "audio": "assets/local-content/o-0.wav"
+    },
+    {
+      "id": -1020,
+      "texto": "oso",
+      "vocal": "o",
+      "dificultad": 1,
+      "imagen": "assets/local-content/o-1.svg",
+      "audio": "assets/local-content/o-1.wav"
+    },
+    {
+      "id": -1021,
+      "texto": "ojo",
+      "vocal": "o",
+      "dificultad": 1,
+      "imagen": "assets/local-content/o-2.svg",
+      "audio": "assets/local-content/o-2.wav"
+    },
+    {
+      "id": -1022,
+      "texto": "sol",
+      "vocal": "o",
+      "dificultad": 2,
+      "imagen": "assets/local-content/o-3.svg",
+      "audio": "assets/local-content/o-3.wav"
+    },
+    {
+      "id": -1023,
+      "texto": "lobo",
+      "vocal": "o",
+      "dificultad": 2,
+      "imagen": "assets/local-content/o-4.svg",
+      "audio": "assets/local-content/o-4.wav"
+    },
+    {
+      "id": -1024,
+      "texto": "globo",
+      "vocal": "o",
+      "dificultad": 3,
+      "imagen": "assets/local-content/o-5.svg",
+      "audio": "assets/local-content/o-5.wav"
+    },
+    {
+      "id": -1025,
+      "texto": "u",
+      "vocal": "u",
+      "dificultad": 1,
+      "imagen": "assets/local-content/u-0.svg",
+      "audio": "assets/local-content/u-0.wav"
+    },
+    {
+      "id": -1026,
+      "texto": "uva",
+      "vocal": "u",
+      "dificultad": 1,
+      "imagen": "assets/local-content/u-1.svg",
+      "audio": "assets/local-content/u-1.wav"
+    },
+    {
+      "id": -1027,
+      "texto": "uña",
+      "vocal": "u",
+      "dificultad": 1,
+      "imagen": "assets/local-content/u-2.svg",
+      "audio": "assets/local-content/u-2.wav"
+    },
+    {
+      "id": -1028,
+      "texto": "luna",
+      "vocal": "u",
+      "dificultad": 2,
+      "imagen": "assets/local-content/u-3.svg",
+      "audio": "assets/local-content/u-3.wav"
+    },
+    {
+      "id": -1029,
+      "texto": "nube",
+      "vocal": "u",
+      "dificultad": 2,
+      "imagen": "assets/local-content/u-4.svg",
+      "audio": "assets/local-content/u-4.wav"
+    },
+    {
+      "id": -1030,
+      "texto": "unicornio",
+      "vocal": "u",
+      "dificultad": 3,
+      "imagen": "assets/local-content/u-5.svg",
+      "audio": "assets/local-content/u-5.wav"
+    }
+  ]
+}

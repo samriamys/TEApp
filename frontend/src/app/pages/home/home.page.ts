@@ -14,7 +14,8 @@ export class HomePage {
   constructor(private authService: AuthService, private router: Router) {}
 
   async logout() {
+    const local = this.authService.isLocal;
     await this.authService.logout();
-    if (this.authService.isNative) await this.router.navigateByUrl('/login', { replaceUrl: true });
+    if (local || this.authService.isNative) await this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 }

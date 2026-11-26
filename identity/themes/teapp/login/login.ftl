@@ -8,7 +8,7 @@
       <input id="username" name="username" type="email" autocomplete="username" required autofocus />
       <label for="password">Contraseña</label>
       <input id="password" name="password" type="password" autocomplete="current-password" required />
-      <label class="show-password"><span>Mostrar contraseña</span><input type="checkbox" data-toggle-password="password" /><span class="password-toggle-art"><img class="toggle-outer" src="${url.resourcesPath}/img/password-outer.svg" alt="" /><img class="toggle-inner" src="${url.resourcesPath}/img/password-inner.svg" alt="" /></span></label>
+      <label class="show-password"><span>Mostrar contraseña </span><input type="checkbox" data-toggle-password="password" /><span class="password-toggle-art"><img class="toggle-outer" src="${url.resourcesPath}/img/password-outer.svg" alt="" /><img class="toggle-inner" src="${url.resourcesPath}/img/password-inner.svg" alt="" /></span></label>
       <#if messagesPerField.existsError('username','password')><p class="teapp-error" role="alert">${kcSanitize(messagesPerField.getFirstError('username','password'))?no_esc}</p></#if>
       <input type="hidden" name="credentialId" value="${(auth.selectedCredential!'')}" />
       <button class="teapp-primary" type="submit">Iniciar</button>

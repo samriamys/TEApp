@@ -1,7 +1,7 @@
 <nav class="custom-tab-bar" aria-label="Navegación principal">
-  <ion-button fill="clear" routerLink="/lessons"><ion-icon name="book-outline" aria-hidden="true"></ion-icon><span>Lecciones</span></ion-button>
-  <ion-button fill="clear" routerLink="/exercise"><ion-icon name="create-outline" aria-hidden="true"></ion-icon><span>Ejercicios</span></ion-button>
-  <ion-button fill="clear" routerLink="/exam"><ion-icon name="document-text-outline" aria-hidden="true"></ion-icon><span>Examen</span></ion-button>
-  <ion-button fill="clear" routerLink="/profile"><ion-icon name="person-outline" aria-hidden="true"></ion-icon><span>Perfil</span></ion-button>
-  <ion-button fill="clear" routerLink="/logout"><ion-icon name="log-out-outline" aria-hidden="true"></ion-icon><span>Salir</span></ion-button>
+  <a href="/lessons" (click)="navigate($event, '/lessons')" [class.active]="isActive('/lessons')" [attr.aria-current]="isActive('/lessons') ? 'page' : null"><ion-icon name="book-outline" aria-hidden="true"></ion-icon><span>Lecciones</span></a>
+  <a href="/exercise" (click)="navigate($event, '/exercise')" [class.active]="isActive('/exercise')" [attr.aria-current]="isActive('/exercise') ? 'page' : null"><ion-icon name="create-outline" aria-hidden="true"></ion-icon><span>Ejercicios</span></a>
+  <a href="/exam" (click)="navigate($event, '/exam')" [class.active]="isActive('/exam')" [attr.aria-current]="isActive('/exam') ? 'page' : null"><ion-icon name="document-text-outline" aria-hidden="true"></ion-icon><span>Examen</span></a>
+  <a href="/profile" (click)="navigate($event, '/profile')" [class.active]="isActive('/profile')" [attr.aria-current]="isActive('/profile') ? 'page' : null"><ion-icon name="person-outline" aria-hidden="true"></ion-icon><span>Perfil</span></a>
+  <a href="/logout" (click)="navigate($event, '/logout')" [class.active]="isActive('/logout')" [attr.aria-current]="isActive('/logout') ? 'page' : null"><ion-icon name="log-out-outline" aria-hidden="true"></ion-icon><span>Salir</span></a>
 </nav>

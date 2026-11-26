@@ -1,0 +1,38 @@
+<ion-content [fullscreen]="true">
+  <main class="lessons-page">
+    <header class="lesson-header">
+      <h1>{{ page.label }}</h1>
+      <div class="lesson-banner">
+        <p>{{ activityLabel.toUpperCase() }} · {{ pageIndex + 1 }} / {{ pages.length }}</p>
+        <h2>{{ bannerTitle }}</h2>
+      </div>
+    </header>
+
+    <section class="map-section" [attr.aria-label]="activityLabel + ' de ' + page.label.toLowerCase()">
+      <div class="map-navigation">
+        <button class="page-arrow" type="button" (click)="previousPage()" [disabled]="pageIndex === 0" [attr.aria-label]="activityLabel + ' anteriores'">
+          <ion-icon name="arrow-back" aria-hidden="true"></ion-icon>
+        </button>
+
+        <div class="lesson-map">
+          <svg class="map-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path [attr.d]="path"></path>
+          </svg>
+          @for (letter of page.letters; track letter) {
+            <a class="lesson-node" [class.current]="letter === nextLetter" [class.completed]="completedLetters.has(letter)"
+              [routerLink]="activityRoute(letter)"
+              [attr.aria-label]="activityName + ' ' + letter + (completedLetters.has(letter) ? (kind === 'lesson' ? ', completada' : ', completado') : letter === nextLetter ? ', siguiente actividad' : '')">
+              <span>{{ letter }}</span>
+              @if (completedLetters.has(letter)) { <ion-icon class="completed-icon" name="checkmark-circle" aria-hidden="true"></ion-icon> }
+            </a>
+          }
+        </div>
+
+        <button class="page-arrow" type="button" (click)="nextPage()" [disabled]="pageIndex === pages.length - 1" [attr.aria-label]="activityLabel + ' siguientes'">
+          <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+      <p class="map-hint">Elige una letra para comenzar</p>
+    </section>
+  </main>
+</ion-content>

@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnDestroy, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import confetti from 'canvas-confetti';
+import { LetterExercise } from '~/app/learning/learning.models';
+import { WordImageDirective } from '~/app/learning/word-image.directive';
+import { WordAudioService } from '~/app/learning/word-audio.service';
 
-export type ExamExercise = {
-  incompleteText: string;
-  completeText: string;
-  imageUrl: string;
-  audioUrl: string;
-  letterOptions: string[];
+export type ExamExercise = LetterExercise & {
   dificultad: number;
   puntos: number;
 };
@@ -18,15 +16,17 @@ export type ExamExercise = {
   templateUrl: './generic-exam.component.html',
   styleUrls: ['./generic-exam.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, WordImageDirective],
 })
-export class GenericExamComponent implements OnInit {
+export class GenericExamComponent implements OnDestroy {
   @Input() exercises: ExamExercise[] = [];
 
   @Output() finished = new EventEmitter<{
     score: number;
     total: number;
   }>();
+  @Output() answered = new EventEmitter<{ index: number; word: string; selected: string; correct: string; elapsedMs: number }>();
+  private timer?: ReturnType<typeof setTimeout>;
 
   currentIndex = 0;
   selectedLetter = '';
@@ -35,10 +35,12 @@ export class GenericExamComponent implements OnInit {
   isAnswered = false;
   isCorrect = false;
   examFinished = false;
+  audioUnavailable = false;
+  private questionStartedAt = Date.now();
 
-  ngOnInit() {
-    this.shuffleCurrentLetters();
-  }
+  constructor(private media: WordAudioService, private zone: NgZone) {}
+
+  ngOnDestroy(): void { if (this.timer) clearTimeout(this.timer); this.media.stop(); }
 
   get currentExercise(): ExamExercise {
     return this.exercises[this.currentIndex];
@@ -59,15 +61,6 @@ export class GenericExamComponent implements OnInit {
     return this.currentExercise.incompleteText;
   }
 
-  shuffleCurrentLetters() {
-    if (!this.currentExercise) return;
-
-    this.currentExercise.letterOptions = this.currentExercise.letterOptions
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-  }
-
   selectLetter(letter: string) {
     if (this.isAnswered || this.examFinished) {
       return;
@@ -80,32 +73,43 @@ export class GenericExamComponent implements OnInit {
       this.currentExercise.completeText.toLowerCase() ===
       this.filledWord.toLowerCase();
 
+    const missingIndex = this.currentExercise.incompleteText.indexOf('_');
+    this.answered.emit({
+      index: this.currentIndex,
+      word: this.currentExercise.completeText,
+      selected: letter,
+      correct: this.currentExercise.completeText[missingIndex] ?? '',
+      elapsedMs: Math.max(0, Date.now() - this.questionStartedAt),
+    });
+
     if (this.isCorrect) {
       this.score += this.currentExercise.puntos;
       this.playAudio();
       this.celebrate();
     }
 
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       confetti.reset();
       this.nextQuestion();
     }, 1500);
   }
 
   nextQuestion() {
+    this.media.stop();
+    this.audioUnavailable = false;
     this.selectedLetter = '';
     this.isAnswered = false;
     this.isCorrect = false;
 
     if (this.currentIndex < this.exercises.length - 1) {
       this.currentIndex++;
-      this.shuffleCurrentLetters();
+      this.questionStartedAt = Date.now();
     } else {
       this.examFinished = true;
 
       this.finished.emit({
         score: this.score,
-        total: 100,
+        total: this.exercises.reduce((sum, exercise) => sum + exercise.puntos, 0),
       });
     }
   }
@@ -119,16 +123,11 @@ export class GenericExamComponent implements OnInit {
   }
 
   playAudio() {
-    const audioElement = document.getElementById(
-      'examAudioElement',
-    ) as HTMLAudioElement;
-
-    if (audioElement) {
-      audioElement.currentTime = 0;
-      audioElement.play().catch((error) => {
-        console.error('Error playing audio:', error);
-      });
-    }
+    if (!this.currentExercise) return;
+    this.audioUnavailable = false;
+    this.media.play(this.currentExercise.audioUrl, this.currentExercise.completeText, () => this.zone.run(() => {
+      this.audioUnavailable = true;
+    }));
   }
 
   celebrate() {

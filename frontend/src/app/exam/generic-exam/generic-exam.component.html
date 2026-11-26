@@ -1,8 +1,6 @@
 <div class="exercise-container" *ngIf="currentExercise && !examFinished">
-  <audio id="examAudioElement" [src]="currentExercise.audioUrl"></audio>
-
   <div class="center-box" (click)="playAudio()">
-    <img [src]="currentExercise.imageUrl" alt="Exam Image" />
+    <img [appWordImage]="currentExercise.imageUrl" imageDescription="Imagen de la palabra" />
 
     <div
       [ngClass]="{
@@ -21,6 +19,7 @@
         {{ filledWord.toLowerCase() }}
       </h2>
     </div>
+    <p *ngIf="audioUnavailable" class="media-message" role="status">Audio no disponible en este dispositivo.</p>
   </div>
 
   <p class="exam-counter">
@@ -45,20 +44,3 @@
   </div>
 </div>
 
-<div class="exercise-container" *ngIf="examFinished">
-  <ion-icon
-    name="checkmark-circle"
-    color="success"
-    style="font-size: 128px"
-  ></ion-icon>
-
-  <h1>¡Examen terminado!</h1>
-
-  <h2>Resultado: {{ score }} / 100%</h2>
-
-  <div class="button-container">
-    <ion-button routerLink="/lessons" color="white">
-      <img src="assets/image/home.png" alt="Lecciones" />
-    </ion-button>
-  </div>
-</div>

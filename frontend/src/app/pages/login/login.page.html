@@ -1,12 +1,13 @@
 <ion-content class="role-page">
   <main class="role-shell">
     <header><h1>Bienvenido!</h1><p>Escoge tu rol</p></header>
-    <fieldset class="roles" aria-label="Escoge tu rol">
+    <fieldset class="roles" [class.tutor-selected]="role === 'tutor'" aria-label="Escoge tu rol">
       <label [class.selected]="role === 'student'"><input type="radio" name="role" value="student" [checked]="role === 'student'" (change)="role = 'student'" />Alumno</label>
       <label [class.selected]="role === 'tutor'"><input type="radio" name="role" value="tutor" [checked]="role === 'tutor'" (change)="role = 'tutor'" />Profesor</label>
     </fieldset>
-    @if (error || !auth.available) { <p class="error" role="alert">No se pudo conectar con el servicio de acceso. Inténtalo de nuevo.</p> }
-    <button class="next" type="button" (click)="continueRegistration()">Siguiente <img src="assets/auth/next.svg" alt="" /></button>
-    <div class="signin"><span>¿Ya tienes una cuenta?</span><button type="button" (click)="signIn()">Inicia aquí</button></div>
+    <button class="next local-button" type="button" (click)="localAccess('register')">Crear cuenta local</button>
+    <div class="signin"><span>¿Ya tienes una cuenta local?</span><button type="button" (click)="localAccess('login')">Inicia aquí</button></div>
+    @if (error) { <p class="error" role="alert">No se pudo conectar con el servicio de acceso en línea. Inténtalo de nuevo.</p> }
+    <div class="signin online"><span>Cuenta en línea</span><button type="button" (click)="continueRegistration()">Registrarse</button><button type="button" (click)="signIn()">Iniciar sesión</button></div>
   </main>
 </ion-content>

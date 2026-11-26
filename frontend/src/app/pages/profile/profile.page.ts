@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { AuthService, User } from '~/app/services/auth/auth.service';
@@ -16,9 +16,11 @@ import { ProfileTutorPage } from './profile-tutor/profile-tutor.page';
   `,
   standalone: true,
   imports: [IonicModule, ProfileStudentPage, ProfileTutorPage],
+  styles: [':host { display: block; height: 100%; }'],
 })
 export class ProfilePage implements OnInit {
   profile?: User;
+  @ViewChild(ProfileStudentPage) private studentProfile?: ProfileStudentPage;
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -27,6 +29,7 @@ export class ProfilePage implements OnInit {
 
   ionViewWillEnter(): void {
     this.checkProfile();
+    void this.studentProfile?.refreshProgress();
   }
 
   private checkProfile(): void {
